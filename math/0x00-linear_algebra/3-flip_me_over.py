@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" 0x00-linear_algebra Task 2 """
+""" 0x00-linear_algebra Task 3 """
 
 
 def matrix_transpose(matrix):
