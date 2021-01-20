@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" 0x00-linear_algebra Task 15 """
+""" 0x00-linear_algebra Task 16 """
 from numpy import array
 
 
