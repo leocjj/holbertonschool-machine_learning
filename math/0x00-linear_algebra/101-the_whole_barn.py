@@ -4,7 +4,7 @@ import numpy as np
 
 
 def add_matrices(mat1, mat2):
-    """  that adds two matrices:. """
+    """  that adds two matrices. """
     m1 = np.array(mat1)
     m2 = np.array(mat2)
     try:
