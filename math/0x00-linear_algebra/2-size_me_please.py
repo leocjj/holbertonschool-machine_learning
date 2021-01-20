@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-""" 0x00-linear_algebra Task 2. """
-
-
 def matrix_shape(matrix):
     """ calculates the shape of a matrix """
     shape = []
@@ -15,4 +12,3 @@ def matrix_shape(matrix):
         if isinstance(len1, list):
             shape.extend(len1)
         return shape
-
