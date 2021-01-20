@@ -3,7 +3,7 @@
 
 
 def matrix_transpose(matrix):
-    """ :returns the transpose of a matrix """
+    """ returns the transpose of a matrix. """
     transpose = []
     for col in range(len(matrix[0])):
         temp_row = []
