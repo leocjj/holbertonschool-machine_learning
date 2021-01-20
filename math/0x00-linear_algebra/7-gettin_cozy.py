@@ -3,7 +3,7 @@
 
 
 def cat_matrices2D(mat1, mat2, axis=0):
-    """ concatenates two matrices along a specific axis"""
+    """ concatenates two matrices along a specific axis. """
     if axis == 0 and len(mat1[0]) == len(mat2[0]):
         # return [*deepcopy(mat1), *deepcopy(mat2)]
         up_mat = [sublist[:] for sublist in mat1]
