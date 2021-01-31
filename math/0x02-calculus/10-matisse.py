@@ -8,4 +8,5 @@ def poly_derivative(poly):
         return None
     if len(poly) <= 1:
         return [0]
-    return [coefficient * power for power, coefficient in enumerate(poly) if power >= 1]
+    return [coefficient * power for power, coefficient in enumerate(poly)
+            if power >= 1]
