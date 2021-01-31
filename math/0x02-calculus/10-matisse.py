@@ -10,6 +10,5 @@ def poly_derivative(poly):
     if len(poly) <= 1:
         return [0]
     for power, coefficient in enumerate(poly):
-        if power >= 1:
-            result.append(coefficient * power)
+        result.append(coefficient * power)
     return result
