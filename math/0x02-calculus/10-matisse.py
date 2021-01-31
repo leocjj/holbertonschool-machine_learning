@@ -7,11 +7,7 @@ def poly_derivative(poly):
     result = []
     if not poly:
         return None
-    if len(poly) <= 1:
-        return [0]
     for power, coefficient in enumerate(poly):
         if power >= 1:
             result.append(coefficient * power)
-    if result[-1] == 0:
-        result.pop()
     return result
