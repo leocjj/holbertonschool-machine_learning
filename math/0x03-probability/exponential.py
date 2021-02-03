@@ -28,3 +28,14 @@ class Exponential:
     def lambtha(self):
         """  getter method """
         return self.__lambtha
+
+    def pdf(self, x):
+        """
+        Calculates the value of the PDF for a given time period
+        :param x: is the time period
+        :return: the PDF value for x
+        """
+        x = int(x)
+        if x < 0:
+            return 0
+        return self.__lambtha * pow(self.e, - self.__lambtha * x)
