@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" 0x03. Probability Task 10 """
+""" 0x03. Probability """
 
 
 class Poisson:
@@ -8,7 +8,10 @@ class Poisson:
     e = 2.7182818285
 
     def __init__(self, data=None, lambtha=1.):
-        """  init method """
+        """
+        :param data: list of the data to be used to estimate the distribution
+        :param lambtha: expected number of occurences in a given time frame
+        """
         if data is None:
             if lambtha <= 0:
                 raise ValueError('lambtha must be a positive value')
