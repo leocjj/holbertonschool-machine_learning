@@ -1,69 +1,59 @@
 # Holberton School - Machine learning
 
-## 0x02. Calculus
+## 0x03. Probability
 
 ### Resources
 
 Read or watch:
 
-    Sigma Notation (starting at 0:32)
-    Π Product Notation (up to 0:20)
-    Sigma and Pi Notation
-    What is a Series?
-    What is a Mathematical Series?
-    List of mathematical series: Sums of powers
-    Bernoulli Numbers(Bn)
-    Bernoulli Polynomials(Bn(x))
-    Derivative (mathematics)
-    Calculus for ML
-    1 of 2: Seeing the big picture
-    2 of 2: First Principles
-    1 of 2: Finding the Derivative
-    2 of 2: What do we discover?
-    Deriving a Rule for Differentiating Powers of x
-    1 of 3: Introducing a substitution
-    2 of 3: Combining derivatives
-    How To Understand Derivatives: The Product, Power & Chain Rules
-    Product Rule
-    Common Derivatives and Integrals
-    Introduction to partial derivatives
-    Partial derivatives - How to solve?
-    Integral
-    Integration and the fundamental theorem of calculus
-    Introduction to Integration
-    Indefinite Integral - Basic Integration Rules, Problems, Formulas, Trig Functions, Calculus
-    Definite Integrals
-    Definite Integral
-    Multiple integral
-    Double integral 1
-    Double integrals 2
+    Probability
+    Basic Concepts
+    Intro to probability 1: Basic notation
+    Intro to probability 2: Independent and disjoint
+    Intro to Probability 3: General Addition Rule; Union; OR
+    Intro to Probability 4: General multiplication rule; Intersection; AND
+    Permutations and Combinations
+    Probability distribution
+    Probability Theory
+    Cumulative Distribution Functions
+    Common Probability Distributions: The Data Scientist’s Crib Sheet
+    NORMAL MODEL PART 1 — EMPIRICAL RULE
+    Normal Distribution
+    Variance
+    Variance (Concept)
+    Binomial Distribution
+    Poisson Distribution
+    Hypergeometric Distribution
+
+As references:
+
+    numpy.random.poisson
+    numpy.random.exponential
+    numpy.random.normal
+    numpy.random.binomial
+    erf
+
 
 ### Learning Objectives
 
 At the end of this project, you are expected to be able to explain to anyone, without the help of Google:
-General
+#### General
+    What is probability?
+    Basic probability notation
+    What is independence? What is disjoint?
+    What is a union? intersection?
+    What are the general addition and multiplication rules?
+    What is a probability distribution?
+    What is a probability distribution function? probability mass function?
+    What is a cumulative distribution function?
+    What is a percentile?
+    What is mean, standard deviation, and variance?
+    Common probability distributions
 
-    Summation and Product notation
-    What is a series?
-    Common series
-    What is a derivative?
-    What is the product rule?
-    What is the chain rule?
-    Common derivative rules
-    What is a partial derivative?
-    What is an indefinite integral?
-    What is a definite integral?
-    What is a double integral?
 
 ## Requirementes
 
-### Multiple Choice Questions
-
-    Allowed editors: vi, vim, emacs
-    Type the number of the correct answer in your answer file
-    All your files should end with a new line
-
-### Python Scripts
+### General
 
     Allowed editors: vi, vim, emacs
     All your files will be interpreted/compiled on Ubuntu 16.04 LTS using python3 (version 3.5)
@@ -77,6 +67,13 @@ General
     Unless otherwise noted, you are not allowed to import any module
     All your files must be executable
     The length of your files will be tested using wc
+
+## Mathematical Approximations
+
+For the following tasks, you will have to use various irrational numbers and functions. Since you are not able to import any libraries, please use the following approximations:
+
+    pi = 3.1415926536
+    e = 2.7182818285
 
 ## Built With
 
