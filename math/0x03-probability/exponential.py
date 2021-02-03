@@ -35,7 +35,6 @@ class Exponential:
         :param x: is the time period
         :return: the PDF value for x
         """
-        x = int(x)
         if x < 0:
             return 0
         return self.__lambtha * pow(self.e, - self.__lambtha * x)
