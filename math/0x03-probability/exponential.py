@@ -38,3 +38,13 @@ class Exponential:
         if x < 0:
             return 0
         return self.__lambtha * pow(self.e, - self.__lambtha * x)
+
+    def cdf(self, x):
+        """
+        Calculates the value of the CDF for a given time period
+        :param x: is the time period
+        :return: the PDF value for x
+        """
+        if x < 0:
+            return 0
+        return 1 - pow(self.e, - self.__lambtha * x)
