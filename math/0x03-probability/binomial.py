@@ -60,3 +60,14 @@ class Binomial:
         k = int(k)
         C = self.fact(self.__n) / (self.fact(k) * self.fact(self.__n - k))
         return C * pow(self.__p, k) * pow(1 - self.__p, self.__n - k)
+
+    def cdf(self, k):
+        """
+        Calculates the value of the CDF for a given number of “successes”
+        :param k: is the number of “successes”
+        :return: the CDF value for k
+        """
+        if not (0 <= k <= self.__n):
+            return 0
+        k = int(k)
+        return sum([self.pmf(i) for i in range(k + 1)])
