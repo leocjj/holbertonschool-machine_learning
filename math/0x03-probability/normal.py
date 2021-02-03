@@ -66,6 +66,11 @@ class Normal:
             / (self.__stddev * pow(2 * self.pi, 0.5))
 
     def erf(self, x):
+        """
+        Calculates erf
+        :param x: is the x-value
+        :return: the erf value for x
+        """
         return (2 / pow(self.pi, 0.5)) * (x - pow(x, 3) / 3 + pow(x, 5) / 10
                                           - pow(x, 7) / 42 + pow(x, 9) / 216)
 
