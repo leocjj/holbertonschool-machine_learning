@@ -64,3 +64,15 @@ class Normal:
         """
         return pow(self.e, -0.5 * pow(self.z_score(x), 2))\
             / (self.__stddev * pow(2 * self.pi, 0.5))
+
+    def erf(self, x):
+        return (2 / pow(self.pi, 0.5)) * (x - pow(x, 3) / 3 + pow(x, 5) / 10
+                                          - pow(x, 7) / 42 + pow(x, 9) / 216)
+
+    def cdf(self, x):
+        """
+        Calculates the value of the CDF for a given x-value
+        :param x: is the x-value
+        :return: the CDF value for x
+        """
+        return 0.5 * (1 + self.erf(self.z_score(x) / pow(2, 0.5)))
