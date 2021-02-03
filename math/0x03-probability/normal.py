@@ -38,3 +38,19 @@ class Normal:
     def stddev(self):
         """  getter method """
         return self.__stddev
+
+    def z_score(self, x):
+        """
+        Calculates the z-score of a given x-value
+        :param x: is the x-value
+        :return: the z-score of x
+        """
+        return (x - self.__mean) / self.__stddev
+
+    def x_value(self, z):
+        """
+        Calculates the x-value of a given z-score
+        :param z: is the z-score
+        :return: the x-value of z
+        """
+        return self.__stddev * z + self.__mean
