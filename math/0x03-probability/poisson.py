@@ -30,7 +30,7 @@ class Poisson:
         """
         Calculates the value of the PMF for a given number of “successes”
         :param k:  is the number of “successes”
-        :return: PMF value for k
+        :return: the PMF value for k
         """
         k = int(k)
         fact_k = 1
@@ -40,3 +40,13 @@ class Poisson:
             for i in range(1, k + 1):
                 fact_k *= i
         return pow(self.e, - self.__lambtha) * pow(self.__lambtha, k) / fact_k
+
+    def cdf(self, k):
+        """
+        Calculates the value of the CDF for a given number of “successes”
+        :param k: is the number of “successes”
+        :return: the CDF value for k
+        """
+        if k < 0:
+            return 0
+        return sum([self.pmf(i) for i in range(0, int(k) + 1)])
