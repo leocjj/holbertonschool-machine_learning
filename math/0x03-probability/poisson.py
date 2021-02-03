@@ -23,3 +23,13 @@ class Poisson:
     @property  # Property wrap
     def lambtha(self):  # getter method
         return self.__lambtha
+
+    def pmf(self, k):
+        k = int(k)
+        factorial_of_k = 1
+        if k < 0:
+            return 0
+        elif k > 0:
+            for i in range(1, k + 1):
+                factorial_of_k *= i
+        return pow(self.e, - self.__lambtha) * pow(self.__lambtha, k) / factorial_of_k
