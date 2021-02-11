@@ -7,11 +7,11 @@ def sigmoid(x):
     """
     https://stackoverflow.com/questions/3985619/
     how-to-calculate-a-logistic-sigmoid-function-in-python
-    Y = 1 / (1 + np.exp(-x))
+    Y = 1. / (1. + np.exp(-x))
     :param x: int or array. Use math.ext instead of np.exp for integers.
     :return: sigmoid function of x
     """
-    return np.exp(-np.logaddexp(0, -x))
+    return np.exp(-np.logaddexp(0., -x))
 
 
 class Neuron:
@@ -26,7 +26,7 @@ class Neuron:
             raise TypeError('nx must be an integer')
         if nx < 1:
             raise ValueError('nx must be a positive integer')
-        self.__W = np.random.normal(size=nx).reshape(1, nx)
+        self.__W = np.random.randn(1, nx)
         self.__b = 0
         self.__A = 0
 
