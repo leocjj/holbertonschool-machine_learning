@@ -54,7 +54,7 @@ class Neuron:
             m is the number of examples.
         :return:  the private attribute __A
         """
-        self.__A = sigmoid(np.matmul(self.W, X) + self.__b)
+        self.__A = sigmoid(np.matmul(self.W, X) + self.b)
         return self.__A
 
     def cost(self, Y, A):
