@@ -70,7 +70,7 @@ class Neuron:
             np.multiply(np.log(1.0000001 - A), (1.0000001 - Y)))
         """
         return -1 / Y.shape[1] * np.sum(
-            np.dot(Y, np.log(A).T) + np.dot((1.0000001 - Y), np.log(1.0000001 - A.T))
+            np.dot(Y, np.log(A).T) + np.dot((1 - Y), np.log(1.0000001 - A.T))
         )
 
     def evaluate(self, X, Y):
