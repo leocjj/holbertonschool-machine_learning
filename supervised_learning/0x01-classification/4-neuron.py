@@ -88,4 +88,4 @@ class Neuron:
             if the output of the network is >= 0.5 and 0 otherwise
         """
         self.forward_prop(X)
-        return np.heaviside(self.A - 0.5, 1), self.cost(Y, self.A)
+        return np.heaviside(self.A - 0.5, 1).astype(int), self.cost(Y, self.A)
