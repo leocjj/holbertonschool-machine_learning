@@ -124,8 +124,7 @@ class Neuron:
         :param verbose: is a boolean, print information about the training.
         :param graph: is a boolean that defines whether or not to graph
             information about the training once the training has completed.
-        :param step:
-
+        :param step: verbose and graph will be printed every step iterations.
         :return: the evaluation of the training data after iterations of
             training have occurred
         """
