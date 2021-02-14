@@ -78,7 +78,7 @@ class NeuralNetwork:
         :param X: is a numpy.ndarray with shape (nx, m) that contains the input
             nx is the number of input features to the neuron,
             m is the number of examples.
-        :return: the private attribute __A
+        :return: the private attributes __A1, __A2
         """
         self.__A1 = sigmoid(np.matmul(self.W1, X) + self.b1)
         self.__A2 = sigmoid(np.matmul(self.W2, self.__A1) + self.b2)
