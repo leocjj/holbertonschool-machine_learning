@@ -115,4 +115,5 @@ class NeuralNetwork:
             if the output of the network is >= 0.5 and 0 otherwise
         """
         self.forward_prop(X)
-        return np.heaviside(self.A2 - 0.5, 1).astype(int), self.cost(Y, self.A2)
+        return np.heaviside(self.A2 - 0.5, 1).astype(int),\
+            self.cost(Y, self.A2)
