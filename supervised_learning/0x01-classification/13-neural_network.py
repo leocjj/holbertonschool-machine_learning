@@ -127,10 +127,10 @@ class NeuralNetwork:
             m is the number of examples.
         :param Y: is a numpy.ndarray with shape (1, m) that contains the
             correct labels for the input data
-        :param A1: is a numpy.ndarray with shape (1, m) containing the activated
-            output of the hidden layer for each example
-        :param A2: is a numpy.ndarray with shape (1, m) containing the activated
-            output of the predicted output for each example
+        :param A1: is a numpy.ndarray with shape (1, m) containing the
+            activated output of the hidden layer for each example
+        :param A2: is a numpy.ndarray with shape (1, m) containing the
+            activated output of the predicted output for each example
         :param alpha: is the learning rate
         :return: Nothing.
         """
@@ -142,8 +142,7 @@ class NeuralNetwork:
         dZ1 = np.matmul(self.__W2.T, dZ2) * (A1 * (1 - A1))
         dW1 = (1 / m) * np.matmul(dZ1, X.T)
         db1 = (1 / m) * np.sum(dZ1, axis=1, keepdims=True)
-
-        self.__W1 = self.__W1 - (alpha * dW1)
-        self.__b1 = self.__b1 - (alpha * db1)
-        self.__W2 = self.__W2 - (alpha * dW2).T
-        self.__b2 = self.__b2 - (alpha * db2)
+        self.__W2 -= (alpha * dW2).T
+        self.__b2 -= (alpha * db2)
+        self.__W1 -= (alpha * dW1)
+        self.__b1 -= (alpha * db1)
