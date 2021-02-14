@@ -144,7 +144,7 @@ class Neuron:
                 raise ValueError('step must be positive and <= iterations')
 
         costs = []
-        steps = np.arange(0, iterations + step, step).shape
+        steps = np.arange(0, iterations + step, step)
         for i in range(iterations + 1):
             self.forward_prop(X)
             if verbose and i % step == 0:
