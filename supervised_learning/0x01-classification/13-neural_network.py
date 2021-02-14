@@ -134,6 +134,7 @@ class NeuralNetwork:
         :param alpha: is the learning rate
         :return: Nothing.
         """
+
         m = Y.shape[1]
         dZ2 = A2 - Y
         self.__W2 -= (alpha * ((1 / m) * np.matmul(A1, dZ2.T))).T
