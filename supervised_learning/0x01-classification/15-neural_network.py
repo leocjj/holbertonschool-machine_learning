@@ -21,7 +21,7 @@ class NeuralNetwork:
 
     def __init__(self, nx, nodes):
         """
-        Defines a single neuron performing binary classification
+        Defines a single layer performing binary classification
         :param nx: number of input features to the neuron
         :param nodes: is the number of nodes found in the hidden layer
         """
