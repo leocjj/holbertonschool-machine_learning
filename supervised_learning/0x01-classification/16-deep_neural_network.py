@@ -11,24 +11,24 @@ class DeepNeuralNetwork:
         """
         Defines a neural network performing binary classification
         :param nx: number of input features to the neuron
-        :param nodes: is the number of nodes found in the hidden layer
+        :param layers: is the number of nodes found in the hidden layer
         """
         if not isinstance(nx, int):
             raise TypeError('nx must be an integer')
         if nx < 1:
             raise ValueError('nx must be a positive integer')
         if not isinstance(layers, list) or not list:
-            raise TypeError('nlayers must be a list of positive integers')
+            raise TypeError('layers must be a list of positive integers')
         if not np.issubdtype(np.array(layers).dtype, np.integer) or\
                 not all(np.array(layers) > 0):
             raise ValueError('layers must be a list of positive integers')
         # Hidden layer
         self.L = len(layers)
         self.cache = {}
-        self.weights = {'W1': np.random.standard_normal((layers[0], nx)) *
+        self.weights = {'W1': np.random.randn(layers[0], nx) *
                         np.sqrt(2 / nx)}
         for i in range(1, self.L):
             self.weights['W' + str(i + 1)] =\
-                np.random.standard_normal((layers[i], layers[i - 1])) *\
+                np.random.randn(layers[i], layers[i - 1]) *\
                 np.sqrt(2 / layers[i - 1])
             self.weights['b' + str(i + 1)] = np.zeros((layers[i], 1))
