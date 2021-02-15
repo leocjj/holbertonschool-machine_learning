@@ -21,7 +21,7 @@ class DeepNeuralNetwork:
             raise TypeError('layers must be a list of positive integers')
         if not np.issubdtype(np.array(layers).dtype, np.integer) or\
                 not all(np.array(layers) > 0):
-            raise ValueError('layers must be a list of positive integers')
+            raise TypeError('layers must be a list of positive integers')
         # Hidden layer
         self.L = len(layers)
         self.cache = {}
