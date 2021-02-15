@@ -19,9 +19,8 @@ class DeepNeuralNetwork:
             raise ValueError('nx must be a positive integer')
         if not isinstance(layers, list) or not list:
             raise TypeError('layers must be a list of positive integers')
-        if not np.issubdtype(np.array(layers).dtype, np.integer) or\
-                not all(np.array(layers) > 0):
-            raise TypeError('layers must be a list of positive integers')
+        if len(layers) == 0:
+            raise TypeError("layers must be a list of positive integers")
         # Hidden layer
         self.L = len(layers)
         self.cache = {}
