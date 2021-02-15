@@ -35,9 +35,6 @@ class DeepNeuralNetwork:
             self.weights['b' + str(i + 1)] = np.zeros((layers[i], 1))
         """
         for i in range(self.L):
-            if layers[i] < 1 or type(layers[i]) is not int:
-                raise TypeError("layers must be a list of positive integers")
-
             w_i = "W" + str(i + 1)
             b_i = "b" + str(i + 1)
 
