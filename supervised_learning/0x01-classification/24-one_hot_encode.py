@@ -20,6 +20,6 @@ def one_hot_encode(Y, classes):
         return None
 
     A = np.zeros((classes, len(Y)))
-    for i in range(classes):
+    for i in range(Y.shape[0]):
         A[Y[i]][i] = 1
     return A
