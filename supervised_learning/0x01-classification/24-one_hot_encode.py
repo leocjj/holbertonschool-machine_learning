@@ -19,7 +19,7 @@ def one_hot_encode(Y, classes):
     if not isinstance(classes, int) or classes < 1:
         return None
 
-    A = np.zeros((classes, len(Y)))
+    A = np.zeros((classes, Y.shape[0]))
     for i in range(Y.shape[0]):
         A[Y[i]][i] = 1
     return A

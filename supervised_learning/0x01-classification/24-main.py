@@ -105,3 +105,8 @@ Y = np.array([50])
 print(Y)
 Y_one_hot = oh_encode(Y, 50)
 print(Y_one_hot)
+
+Y = np.array([1, 1, 2, 3, 4, 5])
+print(Y)
+Y_one_hot = oh_encode(Y, 6)
+print(Y_one_hot)
