@@ -16,7 +16,6 @@ def one_hot_decode(one_hot):
             or not one_hot.ndim == 2 \
             or not one_hot.shape[0] > 0 \
             or not one_hot.shape[1] > 0 \
-            or not np.issubdtype(one_hot.dtype, np.float)\
             or not np.all(0 <= one_hot)\
             or not np.all(one_hot <= 1):
         return None
