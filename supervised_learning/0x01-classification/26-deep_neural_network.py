@@ -3,6 +3,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle as pkl
+import os.path
 
 
 def sigmoid(x):
@@ -174,6 +175,7 @@ class DeepNeuralNetwork:
             if not (1 < iterations <= iterations):
                 raise ValueError('step must be positive and <= iterations')
 
+
         costs = []
         steps = np.arange(0, iterations + step, step)
         for i in range(iterations + 1):
@@ -213,5 +215,9 @@ class DeepNeuralNetwork:
         :param filename: is the file from which the object should be loaded
         :return: the loaded object, or None if filename doesn’t exist
         """
+        if not os.path.isfile(filename):
+            return None
+
         with open(filename, 'rb') as f:
-            return pkl.load(f)
+            a = pkl.load(f)
+        return a
