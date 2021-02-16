@@ -17,8 +17,8 @@ def one_hot_encode(Y, classes):
     if not isinstance(Y, np.ndarray)\
             or not Y.ndim == 1\
             or not np.issubdtype(Y.dtype, np.integer)\
-            or not all(0 <= Y)\
-            or not all(Y < classes):
+            or not np.all(0 <= Y)\
+            or not np.all(Y < classes):
         return None
 
     A = np.zeros((classes, Y.shape[0]))
