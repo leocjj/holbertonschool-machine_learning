@@ -16,8 +16,7 @@ def one_hot_decode(one_hot):
             or not one_hot.ndim == 2 \
             or not np.issubdtype(one_hot.dtype, np.float)\
             or not np.all(0 <= one_hot)\
-            or not np.all(one_hot <= 1)\
-            or not np.max(one_hot) < one_hot.shape[0]:
+            or not np.all(one_hot <= 1):
         return None
 
     result = np.array([])
