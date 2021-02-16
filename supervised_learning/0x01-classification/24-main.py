@@ -110,3 +110,28 @@ Y = np.array([1, 1, 2, 3, 4, 5])
 print(Y)
 Y_one_hot = oh_encode(Y, 6)
 print(Y_one_hot)
+
+Y = np.array([1, 1, 2, 3, 4, 5])
+print(Y)
+Y_one_hot = oh_encode(Y, -1)
+print(Y_one_hot)
+
+Y = np.array([1, 1, 2, 3, 4, 5])
+print(Y)
+Y_one_hot = oh_encode(Y, 0)
+print(Y_one_hot)
+
+Y = np.array([1, 1, 2, 3, 4, 5])
+print(Y)
+Y_one_hot = oh_encode(Y, 'A')
+print(Y_one_hot)
+
+Y = np.array([1, 1, 2, 3, 4, 5])
+print(Y)
+Y_one_hot = oh_encode(Y, [])
+print(Y_one_hot)
+
+Y = np.array([1, 1, 2, 3, 4, 5])
+print(Y)
+Y_one_hot = oh_encode(Y, {})
+print(Y_one_hot)
