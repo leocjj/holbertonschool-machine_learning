@@ -69,7 +69,7 @@ class DeepNeuralNetwork:
         :param X: is a numpy.ndarray with shape (nx, m) that contains the input
             nx is the number of input features to the neuron,
             m is the number of examples.
-        :return: the private attributes __cache
+        :return: the output of the neural network and the cache, respectively.
         """
 
         self.__cache["A0"] = X
