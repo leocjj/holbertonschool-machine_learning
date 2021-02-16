@@ -3,6 +3,17 @@
 import numpy as np
 
 
+def sigmoid(x):
+    """
+    https://stackoverflow.com/questions/3985619/
+    how-to-calculate-a-logistic-sigmoid-function-in-python
+    Y = 1. / (1. + np.exp(-x))
+    :param x: int or array. Use math.ext instead of np.exp for integers.
+    :return: sigmoid function of x
+    """
+    return np.exp(-np.logaddexp(0., -x))
+
+
 class DeepNeuralNetwork:
     """ Class that defines a deep neural network performing binary
         classification: """
@@ -58,14 +69,14 @@ class DeepNeuralNetwork:
         :param X: is a numpy.ndarray with shape (nx, m) that contains the input
             nx is the number of input features to the neuron,
             m is the number of examples.
-        :return: the private attributes __A1, __A2
+        :return: the private attributes __cache
         """
 
         self.__cache["A0"] = X
-        for i in range(self.__L):
-            w_i = "W" + str(i + 1)
-            b_i = "b" + str(i + 1)
-            Za = np.matmul(self.__weights[w_i], self.__cache["A" + str(i)])
-            Z = Za + self.__weights[b_i]
-            self.__cache["A" + str(i + 1)] = 1 / (1 + np.exp(-Z))
-        return self.__cache["A" + str(self.__L)], self.__cache
+        for i in range(1, self.L + 1):
+            self.__cache["A" + str(i)] = sigmoid(
+                np.matmul(self.weights["W" + str(i)],
+                          self.cache["A" + str(i - 1)])
+                + self.weights["b" + str(i)]
+            )
+        return self.cache["A" + str(self.L)], self.cache
