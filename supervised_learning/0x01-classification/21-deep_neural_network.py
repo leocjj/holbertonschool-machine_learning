@@ -127,25 +127,15 @@ class DeepNeuralNetwork:
         :param alpha: is the learning rate
         :return: Nothing.
         """
-        """
-        dZ2 = A2 - Y
-        dW2 = (1 / m) * np.matmul(A1, dZ2.T)
-        db2 = (1 / m) * np.sum(dZ2, axis=1, keepdims=True)
-        dZ1 = np.matmul(self.__W2.T, dZ2) * (A1 * (1 - A1))
-        dW1 = (1 / m) * np.matmul(dZ1, X.T)
-        db1 = (1 / m) * np.sum(dZ1, axis=1, keepdims=True)
-        self.__W2 -= (alpha * dW2).T
-        self.__b2 -= (alpha * db2)
-        self.__W1 -= (alpha * dW1)
-        self.__b1 -= (alpha * db1)
-        """
+
         m = Y.shape[1]
         dZ = cache['A' + str(self.__L)] - Y
+        m1 = (1 / m)
         for i in range(self.__L, 0, -1):
-            dW = (1 / m) * np.matmul(cache['A' + str(i - 1)], dZ.T)
-            db = (1 / m) * np.sum(dZ, axis=1, keepdims=True)
+            dW = m1 * np.matmul(cache['A' + str(i - 1)], dZ.T)
+            db = m1 * np.sum(dZ, axis=1, keepdims=True)
             dZ = np.matmul(self.__weights['W' + str(i)].T, dZ) *\
-                (cache['A'+str(i - 1)] * (1 - cache['A'+str(i - 1)]))
+                (cache['A' + str(i - 1)] * (1 - cache['A' + str(i - 1)]))
 
             self.__weights['W' + str(i)] -= (alpha * dW).T
             self.__weights['b' + str(i)] -= (alpha * db)
