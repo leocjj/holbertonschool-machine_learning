@@ -217,6 +217,8 @@ class DeepNeuralNetwork:
             return None
         if not os.path.isfile(filename):
             return None
+        if not os.path.exists(filename):
+            return None
 
         with open(filename, 'rb') as f:
             a = pkl.load(f)
