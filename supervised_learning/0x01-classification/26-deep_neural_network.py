@@ -204,7 +204,7 @@ class DeepNeuralNetwork:
             filename += '.pkl'
 
         with open(filename, 'wb') as f:
-            pkl.dump(self, f)
+            pkl.dump(self, f, protocol=3)
 
     @staticmethod
     def load(filename):
@@ -215,11 +215,11 @@ class DeepNeuralNetwork:
         """
         if filename == '' or not filename:
             return None
-        if not os.path.isfile(filename):
+        if not filename.endswith('.pkl'):
             return None
-        if not os.path.exists(filename):
+        if not os.path.isfile(filename):
             return None
 
         with open(filename, 'rb') as f:
-            a = pkl.load(f)
+            a = pkl.load(f, fix_imports=True)
         return a
