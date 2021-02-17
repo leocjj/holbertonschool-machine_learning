@@ -3,7 +3,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle as pkl
-
+import os.path
 
 def sigmoid(x):
     """
@@ -215,7 +215,7 @@ class DeepNeuralNetwork:
         """
         if filename == '' or not filename:
             return None
-        if not filename.endswith('.pkl'):
+        if not os.path.isfile(filename):
             return None
 
         with open(filename, 'rb') as f:
