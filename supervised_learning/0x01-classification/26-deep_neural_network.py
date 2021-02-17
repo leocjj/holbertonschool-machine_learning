@@ -215,7 +215,7 @@ class DeepNeuralNetwork:
         """
         if filename == '' or not filename:
             return None
-        if not os.path.isfile(filename):
+        if not filename.endswith('.pkl'):
             return None
 
         with open(filename, 'rb') as f:
