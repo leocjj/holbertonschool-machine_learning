@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" 0x01. Classification """
+""" 0x02. Tensorflow """
 import tensorflow as tf
 
 
