@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import pickle as pkl
 import os.path
 
+
 def sigmoid(x):
     """
     https://stackoverflow.com/questions/3985619/
@@ -87,7 +88,8 @@ class DeepNeuralNetwork:
         """
         Calculates the cost of the model using logistic regression
         https://datascience.stackexchange.com/questions/22470/
-        python-implementation-of-cost-function-in-logistic-regression-why-dot-multiplic
+        python-implementation-of-cost-function-in-logistic-
+        regression-why-dot-multiplic
         :param Y: is a numpy.ndarray with shape (1, m) that contains the
             correct labels for the input data
         :param A: is a numpy.ndarray with shape (1, m) containing the activated
@@ -142,7 +144,8 @@ class DeepNeuralNetwork:
             self.__weights['W' + str(i)] -= (alpha * dW).T
             self.__weights['b' + str(i)] -= (alpha * db)
 
-    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True, graph=True, step=100):
+    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True,
+              graph=True, step=100):
         """
         Trains the neuron.
         Updates the private attributes __weights and __cache
