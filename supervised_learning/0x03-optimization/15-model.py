@@ -165,14 +165,12 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001, beta1=0.9,
     init = tf.global_variables_initializer()
 
     # define number of steps
-    # print(Data_train[0].shape[0])
     steps = round(Data_train[0].shape[0] / batch_size)
     length = Data_train[0].shape[0]
 
     with tf.Session() as session:
         session.run(init)
         for epoch in range(epochs + 1):
-            # ={x: X_valid, y: Y_valid}
             feed_dict = {x: Data_train[0], y: Data_train[1]}
             # train values
             t_accur = session.run(accuracy, feed_dict)
