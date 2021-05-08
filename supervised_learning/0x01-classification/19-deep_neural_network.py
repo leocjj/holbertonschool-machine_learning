@@ -93,7 +93,5 @@ class DeepNeuralNetwork:
         :return: return average of the loss (error) function.
             loss function increase in the opposite sign the output is going.
         """
-        return -1 / Y.shape[1] * np.sum(
-            np.multiply(np.log(A), Y) +
-            np.multiply(np.log(1.0000001 - A), (1 - Y))
-        )
+        return (-1 / Y.shape[1]) *\
+            np.sum(Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
