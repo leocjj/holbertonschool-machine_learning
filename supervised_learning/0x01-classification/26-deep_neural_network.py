@@ -210,14 +210,14 @@ class DeepNeuralNetwork:
     @staticmethod
     def load(filename):
         """
-        Loads a pickled DeepNeuralNetwork object.
-        :param filename: is the file from which the object should be loaded
-        :return: the loaded object, or None if filename doesn’t exist
+        Loads a pickled DeepNeuralNetwork object
+        filename is the file from which the object should be loaded
+        Returns: the loaded object, or None if filename doesn’t exist
         """
         try:
-            f = open(filename, 'rb')
-        except IOError:
+            # read in binary
+            with open(filename, 'rb') as f:
+                obj = pickle.load(f)
+            return obj
+        except FileNotFoundError:
             return None
-        else:
-            with f:
-                return pickle.load(f)
