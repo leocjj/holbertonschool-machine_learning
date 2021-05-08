@@ -214,9 +214,6 @@ class DeepNeuralNetwork:
         :param filename: is the file from which the object should be loaded
         :return: the loaded object, or None if filename doesn’t exist
         """
-        if not os.path.isfile(filename):
-            return None
-
         try:
             f = open(filename, 'rb')
         except IOError:
