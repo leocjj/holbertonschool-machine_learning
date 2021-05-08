@@ -23,9 +23,9 @@ class DeepNeuralNetwork:
 
     def __init__(self, nx, layers):
         """
-        Defines a neural network performing binary classification
-        :param nx: number of input features to the neuron
-        :param layers: is the number of nodes found in the hidden layer
+        Defines a deep neural network performing binary classification.
+        :param nx:  is the number of input features.
+        :param layers: list with the number of nodes for each layer.
         """
         if not isinstance(nx, int):
             raise TypeError('nx must be an integer')
@@ -88,19 +88,16 @@ class DeepNeuralNetwork:
         """
         Calculates the cost of the model using logistic regression
         https://datascience.stackexchange.com/questions/22470/
-        python-implementation-of-cost-function-in-logistic-
-        regression-why-dot-multiplic
+        python-implementation-of-cost-function-in-logistic-regression-why-dot-multiplic
         :param Y: is a numpy.ndarray with shape (1, m) that contains the
             correct labels for the input data
         :param A: is a numpy.ndarray with shape (1, m) containing the activated
             output of the neuron for each example
-        :return: return -1 / Y.shape[1] * np.sum( np.multiply(np.log(A), Y) +
-            np.multiply(np.log(1.0000001 - A), (1.0000001 - Y)))
+        :return: return average of the loss (error) function.
+            loss function increase in the opposite sign the output is going.
         """
-        return -1 / Y.shape[1] * np.sum(
-            np.multiply(np.log(A), Y) +
-            np.multiply(np.log(1.0000001 - A), (1 - Y))
-        )
+        return (-1 / Y.shape[1]) *\
+            np.sum(Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
 
     def evaluate(self, X, Y):
         """
@@ -193,6 +190,7 @@ class DeepNeuralNetwork:
             plt.xlabel("iteration")
             plt.ylabel("cost")
             plt.show()
+
         return self.evaluate(X, Y)
 
     def save(self, filename):
