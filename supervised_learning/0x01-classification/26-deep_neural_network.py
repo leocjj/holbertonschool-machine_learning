@@ -223,8 +223,8 @@ class DeepNeuralNetwork:
 
         try:
             f = open(filename, 'rb')
-        except FileNotFoundError:
+        except IOError:
             return None
         else:
             with f:
-                return pickle.load(f, fix_imports=True)
+                return pickle.load(f)
