@@ -9,9 +9,9 @@ class DeepNeuralNetwork:
 
     def __init__(self, nx, layers):
         """
-        Defines a neural network performing binary classification
-        :param nx: number of input features to the neuron
-        :param layers: is the number of nodes found in the hidden layer
+        Defines a deep neural network performing binary classification.
+        :param nx:  is the number of input features.
+        :param layers: list with the number of nodes for each layer.
         """
         if not isinstance(nx, int):
             raise TypeError('nx must be an integer')
