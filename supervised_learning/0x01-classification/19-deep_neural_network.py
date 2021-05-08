@@ -90,8 +90,8 @@ class DeepNeuralNetwork:
             correct labels for the input data
         :param A: is a numpy.ndarray with shape (1, m) containing the activated
             output of the neuron for each example
-        :return: return -1 / Y.shape[1] * np.sum( np.multiply(np.log(A), Y) +
-            np.multiply(np.log(1.0000001 - A), (1.0000001 - Y)))
+        :return: return average of the loss (error) function.
+            loss function increase in the opposite sign the output is going.
         """
         return -1 / Y.shape[1] * np.sum(
             np.multiply(np.log(A), Y) +
