@@ -214,8 +214,6 @@ class DeepNeuralNetwork:
         :param filename: is the file from which the object should be loaded
         :return: the loaded object, or None if filename doesn’t exist
         """
-        if filename == '' or not filename:
-            return None
         if not os.path.isfile(filename):
             return None
 
