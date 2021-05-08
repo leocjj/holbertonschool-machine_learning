@@ -14,7 +14,8 @@ print(deep.cache)
 print(deep.weights)
 print(deep.L)
 deep.L = 10
-print("1", deep.L)
+print(deep.L)
+
 """
 np.random.seed(0)
 deep = Deep(X.shape[0], [])
