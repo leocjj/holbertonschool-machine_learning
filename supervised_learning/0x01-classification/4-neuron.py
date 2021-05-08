@@ -69,11 +69,8 @@ class Neuron:
         :return: return average of the loss (error) function.
             loss function increase in the opposite sign the output is going.
         """
-        return (-1 / Y.shape[1])\
-            * np.sum(
-                    np.multiply(Y, np.log(A)) +
-                    np.multiply((1 - Y), np.log(1.0000001 - A))
-            )
+        return (-1 / Y.shape[1]) *\
+            np.sum(Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
 
     def evaluate(self, X, Y):
         """
