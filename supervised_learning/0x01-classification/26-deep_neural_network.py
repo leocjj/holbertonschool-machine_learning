@@ -2,7 +2,7 @@
 """ 0x01. Classification """
 import numpy as np
 import matplotlib.pyplot as plt
-import pickle as pkl
+import pickle
 import os.path
 
 
@@ -205,7 +205,7 @@ class DeepNeuralNetwork:
             filename += '.pkl'
 
         with open(filename, 'wb') as f:
-            pkl.dump(self, f, protocol=3)
+            pickle.dump(self, f, protocol=3)
 
     @staticmethod
     def load(filename):
@@ -221,6 +221,10 @@ class DeepNeuralNetwork:
         if not os.path.isfile(filename):
             return None
 
-        with open(filename, 'rb') as f:
-            a = pkl.load(f, fix_imports=True)
-        return a
+        try:
+            f = open(filename, 'rb')
+        except IOError:
+            return None
+        else:
+            with f:
+                return pickle.load(f, fix_imports=True)
