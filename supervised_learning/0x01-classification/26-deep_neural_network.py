@@ -223,7 +223,7 @@ class DeepNeuralNetwork:
 
         try:
             f = open(filename, 'rb')
-        except IOError:
+        except FileNotFoundError:
             return None
         else:
             with f:
