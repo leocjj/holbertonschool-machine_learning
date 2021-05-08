@@ -216,14 +216,13 @@ class DeepNeuralNetwork:
         """
         if filename == '' or not filename:
             return None
-        if not filename.endswith('.pkl'):
-            return None
         if not os.path.isfile(filename):
             return None
 
         try:
-            with open(filename, 'rb') as f:
-                obj = pickle.load(f)
-            return obj
-        except FileNotFoundError:
+            f = open(filename, 'rb')
+        except IOError:
             return None
+        else:
+            with f:
+                return pickle.load(f)
