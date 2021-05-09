@@ -141,27 +141,39 @@ class DeepNeuralNetwork:
             self.__weights['W' + str(i)] -= (alpha * dW).T
             self.__weights['b' + str(i)] -= (alpha * db)
 
-    def train(self, X, Y, iterations=5000, alpha=0.05,
-              verbose=True, graph=True, step=100):
+    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True,
+              graph=True, step=100):
         """
-        Trains the deep neural network by updating __weights and __cache
-        - You are allowed to use one loop
-        - Returns the evaluation of the training data after
-          iterations of training have occurred
+        Trains the neuron.
+        Updates the private attributes __weights and __cache
+        :param X: is a numpy.ndarray with shape (nx, m) that contains the input
+            nx is the number of input features to the neuron,
+            m is the number of examples.
+        :param Y: is a numpy.ndarray with shape (1, m) that contains the
+            correct labels for the input data
+        :param iterations: is the number of iterations to train over
+        :param alpha: is the learning rate
+        :param verbose: is a boolean, print information about the training.
+        :param graph: is a boolean that defines whether or not to graph
+            information about the training once the training has completed.
+        :param step: verbose and graph will be printed every step iterations.
+        :return: the evaluation of the training data after iterations of
+            training have occurred
         """
-        if type(iterations) is not int:
-            raise TypeError("iterations must be an integer")
-        if iterations <= 0:
-            raise ValueError("iterations must be a positive integer")
-        if type(alpha) is not float:
-            raise TypeError("alpha must be a float")
-        if alpha <= 0:
-            raise ValueError("alpha must be positive")
-        if verbose is True or graph is True:
-            if type(step) is not int:
-                raise TypeError("step must be an integer")
-            if step <= 0 or step > iterations:
-                raise ValueError("step must be positive and <= iterations")
+        if not isinstance(iterations, int):
+            raise TypeError('iterations must be an integer')
+        if iterations < 1:
+            raise ValueError('iterations must be a positive integer')
+        if not isinstance(alpha, float):
+            raise TypeError('alpha must be a float')
+        if alpha < 0:
+            raise ValueError('alpha must be positive')
+        if verbose or graph:
+            if not isinstance(step, int):
+                raise TypeError('step must be an integer')
+            if not (1 < iterations <= iterations):
+                raise ValueError('step must be positive and <= iterations')
+
         cost_list = []
         steps_list = []
         for i in range(iterations):
@@ -173,12 +185,14 @@ class DeepNeuralNetwork:
                 steps_list.append(i)
                 if verbose is True:
                     print("Cost after {} iterations: {}".format(i, cost))
-        if graph is True:
-            plt.plot(steps_list, cost_list, 'b-')
-            plt.xlabel('iteration')
-            plt.ylabel('cost')
-            plt.title('Training Cost')
+
+        if graph:
+            plt.plot(steps_list, cost_list)
+            plt.title("Training Cost")
+            plt.xlabel("iteration")
+            plt.ylabel("cost")
             plt.show()
+
         return self.evaluate(X, Y)
 
     def save(self, filename):
