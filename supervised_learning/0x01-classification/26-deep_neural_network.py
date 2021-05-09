@@ -119,26 +119,27 @@ class DeepNeuralNetwork:
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
-        Calculates one pass of gradient descent on the neural network
-        - cache is a dictionary containing all the intermediary values
-          of the network
-        - alpha is the learning rate
-        - Updates the private attribute __weights
-        - You are allowed to use one loop
+        Calculates one pass of gradient descent on the neuron.
+        Updates the private attributes __W1, __b1, __W2, and __b2
+        :param Y: is a numpy.ndarray with shape (1, m) that contains the
+            correct labels for the input data.
+        :param cache: is a dictionary containing all the intermediary values
+            of the network.
+        :param alpha: is the learning rate
+        :return: Nothing.
         """
+
         m = Y.shape[1]
-        dZ = self.__cache["A{}".format(self.__L)] - Y
+        dZ = cache['A' + str(self.__L)] - Y
+        m1 = (1 / m)
         for i in range(self.__L, 0, -1):
-            A = "A{}".format(i-1)
-            W = "W{}".format(i)
-            b = "b{}".format(i)
-            dW = (1/m)*np.matmul(dZ, self.__cache[A].T)
-            db = (1/m)*np.sum(dZ, axis=1, keepdims=True)
-            dZ = np.matmul(self.__weights[W].T, dZ) * (self.__cache[A] *
-                                                       (1 - self.__cache[A]))
-            # update of __weights
-            self.__weights[W] = self.__weights[W] - alpha*dW
-            self.__weights[b] = self.__weights[b] - alpha*db
+            dW = m1 * np.matmul(cache['A' + str(i - 1)], dZ.T)
+            db = m1 * np.sum(dZ, axis=1, keepdims=True)
+            dZ = np.matmul(self.__weights['W' + str(i)].T, dZ) *\
+                (cache['A' + str(i - 1)] * (1 - cache['A' + str(i - 1)]))
+
+            self.__weights['W' + str(i)] -= (alpha * dW).T
+            self.__weights['b' + str(i)] -= (alpha * db)
 
     def train(self, X, Y, iterations=5000, alpha=0.05,
               verbose=True, graph=True, step=100):
