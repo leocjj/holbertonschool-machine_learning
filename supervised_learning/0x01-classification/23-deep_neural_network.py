@@ -171,7 +171,6 @@ class DeepNeuralNetwork:
             if not (1 < iterations <= iterations):
                 raise ValueError('step must be positive and <= iterations')
 
-
         costs = []
         steps = np.arange(0, iterations + step, step)
         for i in range(iterations):
