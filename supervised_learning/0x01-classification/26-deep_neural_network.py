@@ -3,7 +3,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle
-import os.path
 
 
 def sigmoid(x):
@@ -196,13 +195,16 @@ class DeepNeuralNetwork:
     def save(self, filename):
         """
         Saves the instance object to a file in pickle format
-        filename is the file to which the object should be saved
-        If filename does not have the extension .pkl, add it
+        :param filename: is the file to which the object should be saved
+        :return: None
         """
-        if filename[-4:] != ".pkl":
-            filename = filename + ".pkl"
+        if filename == '' or not filename:
+            return None
+        if not filename.endswith('.pkl'):
+            filename += '.pkl'
+
         with open(filename, 'wb') as f:
-            pickle.dump(self, f)
+            pickle.dump(self, f, protocol=3)
 
     @staticmethod
     def load(filename):
@@ -214,8 +216,6 @@ class DeepNeuralNetwork:
         if filename == '' or not filename:
             return None
         if not filename.endswith('.pkl'):
-            return None
-        if not os.path.isfile(filename):
             return None
 
         try:
