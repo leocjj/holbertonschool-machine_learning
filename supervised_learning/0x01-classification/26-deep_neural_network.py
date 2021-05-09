@@ -176,7 +176,7 @@ class DeepNeuralNetwork:
 
         costs = []
         steps = np.arange(0, iterations + step, step)
-        for i in range(iterations + 1):
+        for i in range(iterations):
             self.forward_prop(X)
             if verbose and i % step == 0:
                 cost = self.cost(Y, self.cache["A" + str(self.L)])
