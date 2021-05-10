@@ -76,22 +76,15 @@ class DeepNeuralNetwork:
         """
         self.__cache["A0"] = X
         for i in range(1, self.L + 1):
-            z = np.matmul(self.weights["W" + str(i)], self.cache["A" + str(i - 1)])\
+            z = np.matmul(
+                          self.weights["W" + str(i)],
+                          self.cache["A" + str(i - 1)])\
                 + self.weights["b" + str(i)]
-            '''
-            for i in range(self.__L):
-                W_key = "W{}".format(i + 1)
-                b_key = "b{}".format(i + 1)
-                A_key_prev = "A{}".format(i)
-                A_key_forw = "A{}".format(i + 1)
-    
-                Z = np.matmul(self.__weights[W_key], self.__cache[A_key_prev]) \
-                    + self.__weights[b_key]
-                # if it is the output (last) layer
-            '''
+
             if i == self.__L:
-                # Output layer multi-class classification activation function: softmax
-                self.__cache["A" + str(i)] = np.exp(z) / np.sum(np.exp(z), axis=0, keepdims=True)
+                # Output layer activation function: softmax
+                self.__cache["A" + str(i)] =\
+                    np.exp(z) / np.sum(np.exp(z), axis=0, keepdims=True)
             else:
                 # Hidden layers activation function: sigmoid
                 self.__cache["A" + str(i)] = sigmoid(z)
@@ -133,10 +126,11 @@ class DeepNeuralNetwork:
         ).astype(int), self.cost(Y, self.cache["A" + str(self.L)])
         '''
         self.forward_prop(X)
+        key = "A" + str(self.__L)
         return np.where(
-                        self.__cache["A" + str(self.__L)] ==
-                        np.amax(self.__cache["A" + str(self.__L)], axis=0), 1, 0
-                        ), self.cost(Y, self.cache["A" + str(self.L)])
+                        self.__cache[key] ==
+                        np.amax(self.__cache[key], axis=0), 1, 0
+                        ), self.cost(Y, self.cache[key])
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
