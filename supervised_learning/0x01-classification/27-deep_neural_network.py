@@ -98,7 +98,6 @@ class DeepNeuralNetwork:
         # return self.cache["A" + str(self.L)], self.cache
         return self.__cache["A" + str(self.L)], self.__cache
 
-
     def cost(self, Y, A):
         """
         Calculates the cost of the model using logistic regression
@@ -133,11 +132,11 @@ class DeepNeuralNetwork:
             self.cache["A" + str(self.L)] - 0.5, 1
         ).astype(int), self.cost(Y, self.cache["A" + str(self.L)])
         '''
+        self.forward_prop(X)
         return np.where(
                         self.__cache["A" + str(self.__L)] ==
                         np.amax(self.__cache["A" + str(self.__L)], axis=0), 1, 0
                         ), self.cost(Y, self.cache["A" + str(self.L)])
-
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
