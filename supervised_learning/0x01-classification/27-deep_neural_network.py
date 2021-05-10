@@ -2,8 +2,9 @@
 """ 0x01. Classification """
 import numpy as np
 import matplotlib.pyplot as plt
-import pickle as pkl
-import os.path
+from pickle import dump, load
+from os.path import isfile
+
 
 def sigmoid(x):
     """
@@ -22,9 +23,9 @@ class DeepNeuralNetwork:
 
     def __init__(self, nx, layers):
         """
-        Defines a neural network performing binary classification
-        :param nx: number of input features to the neuron
-        :param layers: is the number of nodes found in the hidden layer
+        Defines a deep neural network performing binary classification.
+        :param nx:  is the number of input features.
+        :param layers: list with the number of nodes for each layer.
         """
         if not isinstance(nx, int):
             raise TypeError('nx must be an integer')
@@ -73,15 +74,30 @@ class DeepNeuralNetwork:
             m is the number of examples.
         :return: the output of the neural network and the cache, respectively.
         """
-
         self.__cache["A0"] = X
         for i in range(1, self.L + 1):
-            self.__cache["A" + str(i)] = sigmoid(
-                np.matmul(self.weights["W" + str(i)],
-                          self.cache["A" + str(i - 1)])
+            z = np.matmul(self.weights["W" + str(i)], self.cache["A" + str(i - 1)])\
                 + self.weights["b" + str(i)]
-            )
-        return self.cache["A" + str(self.L)], self.cache
+            '''
+            for i in range(self.__L):
+                W_key = "W{}".format(i + 1)
+                b_key = "b{}".format(i + 1)
+                A_key_prev = "A{}".format(i)
+                A_key_forw = "A{}".format(i + 1)
+    
+                Z = np.matmul(self.__weights[W_key], self.__cache[A_key_prev]) \
+                    + self.__weights[b_key]
+                # if it is the output (last) layer
+            '''
+            if i == self.__L:
+                # Output layer multi-class classification activation function: softmax
+                self.__cache["A" + str(i)] = np.exp(z) / np.sum(np.exp(z), axis=0, keepdims=True)
+            else:
+                # Hidden layers activation function: sigmoid
+                self.__cache["A" + str(i)] = sigmoid(z)
+        # return self.cache["A" + str(self.L)], self.cache
+        return self.__cache["A" + str(self.L)], self.__cache
+
 
     def cost(self, Y, A):
         """
@@ -92,13 +108,11 @@ class DeepNeuralNetwork:
             correct labels for the input data
         :param A: is a numpy.ndarray with shape (1, m) containing the activated
             output of the neuron for each example
-        :return: return -1 / Y.shape[1] * np.sum( np.multiply(np.log(A), Y) +
-            np.multiply(np.log(1.0000001 - A), (1.0000001 - Y)))
+        :return: return average of the loss (error) function.
+            loss function increase in the opposite sign the output is going.
         """
-        return -1 / Y.shape[1] * np.sum(
-            np.multiply(np.log(A), Y) +
-            np.multiply(np.log(1.0000001 - A), (1 - Y))
-        )
+
+        return (-1 / Y.shape[1]) * np.sum(Y * np.log(A))
 
     def evaluate(self, X, Y):
         """
@@ -113,10 +127,14 @@ class DeepNeuralNetwork:
             predicted labels for each example and the label values should be 1
             if the output of the network is >= 0.5 and 0 otherwise
         """
+        '''
         self.forward_prop(X)
         return np.heaviside(
             self.cache["A" + str(self.L)] - 0.5, 1
         ).astype(int), self.cost(Y, self.cache["A" + str(self.L)])
+        '''
+        return np.where(self.__cache["A" + str(self.__L)] == np.amax(self.__cache["A" + str(self.__L)], axis=0), 1, 0)
+
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
@@ -142,7 +160,8 @@ class DeepNeuralNetwork:
             self.__weights['W' + str(i)] -= (alpha * dW).T
             self.__weights['b' + str(i)] -= (alpha * db)
 
-    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True, graph=True, step=100):
+    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True,
+              graph=True, step=100):
         """
         Trains the neuron.
         Updates the private attributes __weights and __cache
@@ -160,6 +179,7 @@ class DeepNeuralNetwork:
         :return: the evaluation of the training data after iterations of
             training have occurred
         """
+
         if not isinstance(iterations, int):
             raise TypeError('iterations must be an integer')
         if iterations < 1:
@@ -175,8 +195,8 @@ class DeepNeuralNetwork:
                 raise ValueError('step must be positive and <= iterations')
 
         costs = []
-        steps = np.arange(0, iterations + step, step)
-        for i in range(iterations + 1):
+        steps = np.arange(0, iterations, step)
+        for i in range(iterations):
             self.forward_prop(X)
             if verbose and i % step == 0:
                 cost = self.cost(Y, self.cache["A" + str(self.L)])
@@ -190,6 +210,7 @@ class DeepNeuralNetwork:
             plt.xlabel("iteration")
             plt.ylabel("cost")
             plt.show()
+
         return self.evaluate(X, Y)
 
     def save(self, filename):
@@ -198,13 +219,14 @@ class DeepNeuralNetwork:
         :param filename: is the file to which the object should be saved
         :return: None
         """
+
         if filename == '' or not filename:
             return None
         if not filename.endswith('.pkl'):
             filename += '.pkl'
 
         with open(filename, 'wb') as f:
-            pkl.dump(self, f, protocol=3)
+            dump(self, f, protocol=3)
 
     @staticmethod
     def load(filename):
@@ -213,13 +235,18 @@ class DeepNeuralNetwork:
         :param filename: is the file from which the object should be loaded
         :return: the loaded object, or None if filename doesn’t exist
         """
+
         if filename == '' or not filename:
             return None
         if not filename.endswith('.pkl'):
             return None
-        if not os.path.isfile(filename):
+        if not isfile(filename):
             return None
 
-        with open(filename, 'rb') as f:
-            a = pkl.load(f, fix_imports=True)
-        return a
+        try:
+            f = open(filename, 'rb')
+        except IOError:
+            return None
+        else:
+            with f:
+                return load(f)
