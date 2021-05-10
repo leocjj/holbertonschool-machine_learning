@@ -133,7 +133,10 @@ class DeepNeuralNetwork:
             self.cache["A" + str(self.L)] - 0.5, 1
         ).astype(int), self.cost(Y, self.cache["A" + str(self.L)])
         '''
-        return np.where(self.__cache["A" + str(self.__L)] == np.amax(self.__cache["A" + str(self.__L)], axis=0), 1, 0)
+        return np.where(
+                        self.__cache["A" + str(self.__L)] ==
+                        np.amax(self.__cache["A" + str(self.__L)], axis=0), 1, 0
+                        ), self.cost(Y, self.cache["A" + str(self.L)])
 
 
     def gradient_descent(self, Y, cache, alpha=0.05):
