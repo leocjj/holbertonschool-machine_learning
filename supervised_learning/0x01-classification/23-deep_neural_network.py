@@ -172,7 +172,7 @@ class DeepNeuralNetwork:
                 raise ValueError('step must be positive and <= iterations')
 
         costs = []
-        steps = np.arange(0, iterations + step, step)
+        steps = np.arange(0, iterations, step)
         for i in range(iterations):
             self.forward_prop(X)
             if verbose and i % step == 0:
