@@ -74,12 +74,14 @@ class DeepNeuralNetwork:
             m is the number of examples.
         :return: the output of the neural network and the cache, respectively.
         """
+
         self.__cache["A0"] = X
-        for i in range(1, self.L + 1):
+
+        for i in range(1, self.__L + 1):
             z = np.matmul(
-                          self.weights["W" + str(i)],
-                          self.cache["A" + str(i - 1)])\
-                + self.weights["b" + str(i)]
+                          self.__weights["W" + str(i)],
+                          self.__cache["A" + str(i - 1)])\
+                + self.__weights["b" + str(i)]
 
             if i == self.__L:
                 # Output layer activation function: softmax
@@ -88,8 +90,7 @@ class DeepNeuralNetwork:
             else:
                 # Hidden layers activation function: sigmoid
                 self.__cache["A" + str(i)] = sigmoid(z)
-        # return self.cache["A" + str(self.L)], self.cache
-        return self.__cache["A" + str(self.L)], self.__cache
+        return self.__cache["A" + str(self.__L)], self.__cache
 
     def cost(self, Y, A):
         """
@@ -122,15 +123,15 @@ class DeepNeuralNetwork:
         '''
         self.forward_prop(X)
         return np.heaviside(
-            self.cache["A" + str(self.L)] - 0.5, 1
-        ).astype(int), self.cost(Y, self.cache["A" + str(self.L)])
+            self.__cache["A" + str(self.__L)] - 0.5, 1
+        ).astype(int), self.cost(Y, self.__cache["A" + str(self.__L)])
         '''
         self.forward_prop(X)
         key = "A" + str(self.__L)
         return np.where(
                         self.__cache[key] ==
                         np.amax(self.__cache[key], axis=0), 1, 0
-                        ), self.cost(Y, self.cache[key])
+                        ), self.cost(Y, self.__cache[key])
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
@@ -195,10 +196,10 @@ class DeepNeuralNetwork:
         for i in range(iterations):
             self.forward_prop(X)
             if verbose and i % step == 0:
-                cost = self.cost(Y, self.cache["A" + str(self.L)])
+                cost = self.cost(Y, self.__cache["A" + str(self.__L)])
                 print("Cost after {} iterations: {}".format(i, cost))
                 costs.append(cost)
-            self.gradient_descent(Y, self.cache, alpha)
+            self.gradient_descent(Y, self.__cache, alpha)
 
         if graph:
             plt.plot(steps, costs)
