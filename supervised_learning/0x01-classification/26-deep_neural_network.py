@@ -2,8 +2,8 @@
 """ 0x01. Classification """
 import numpy as np
 import matplotlib.pyplot as plt
-import pickle
-import os.path
+from pickle import dump, load
+from os.path import isfile
 
 
 def sigmoid(x):
@@ -82,6 +82,7 @@ class DeepNeuralNetwork:
                           self.cache["A" + str(i - 1)])
                 + self.weights["b" + str(i)]
             )
+
         return self.cache["A" + str(self.L)], self.cache
 
     def cost(self, Y, A):
@@ -96,6 +97,7 @@ class DeepNeuralNetwork:
         :return: return average of the loss (error) function.
             loss function increase in the opposite sign the output is going.
         """
+
         return (-1 / Y.shape[1]) *\
             np.sum(Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
 
@@ -112,6 +114,7 @@ class DeepNeuralNetwork:
             predicted labels for each example and the label values should be 1
             if the output of the network is >= 0.5 and 0 otherwise
         """
+
         self.forward_prop(X)
         return np.heaviside(
             self.cache["A" + str(self.L)] - 0.5, 1
@@ -160,6 +163,7 @@ class DeepNeuralNetwork:
         :return: the evaluation of the training data after iterations of
             training have occurred
         """
+
         if not isinstance(iterations, int):
             raise TypeError('iterations must be an integer')
         if iterations < 1:
@@ -175,7 +179,7 @@ class DeepNeuralNetwork:
                 raise ValueError('step must be positive and <= iterations')
 
         costs = []
-        steps = np.arange(0, iterations + step, step)
+        steps = np.arange(0, iterations, step)
         for i in range(iterations):
             self.forward_prop(X)
             if verbose and i % step == 0:
@@ -199,13 +203,14 @@ class DeepNeuralNetwork:
         :param filename: is the file to which the object should be saved
         :return: None
         """
+
         if filename == '' or not filename:
             return None
         if not filename.endswith('.pkl'):
             filename += '.pkl'
 
         with open(filename, 'wb') as f:
-            pickle.dump(self, f, protocol=3)
+            dump(self, f, protocol=3)
 
     @staticmethod
     def load(filename):
@@ -214,11 +219,12 @@ class DeepNeuralNetwork:
         :param filename: is the file from which the object should be loaded
         :return: the loaded object, or None if filename doesn’t exist
         """
+
         if filename == '' or not filename:
             return None
         if not filename.endswith('.pkl'):
             return None
-        if not os.path.isfile(filename):
+        if not isfile(filename):
             return None
 
         try:
@@ -227,4 +233,4 @@ class DeepNeuralNetwork:
             return None
         else:
             with f:
-                return pickle.load(f)
+                return load(f)
