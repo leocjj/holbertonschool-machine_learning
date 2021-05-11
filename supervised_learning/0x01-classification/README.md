@@ -68,7 +68,6 @@ Optional:
 ### Learning Objectives
 
 At the end of this project, you are expected to be able to explain to anyone, without the help of Google:
-#### General
 
     What is a model?
     What is supervised learning?
@@ -100,16 +99,8 @@ At the end of this project, you are expected to be able to explain to anyone, wi
     What is cross-entropy loss?
     What is pickling in Python?
 
-
-
 ## Requirementes
 
-### General
-
-    Allowed editors: vi, vim, emacs
-    All your files will be interpreted/compiled on Ubuntu 16.04 LTS using python3 (version 3.5)
-    Your files will be executed with numpy (version 1.15)
-    All your files should end with a new line
     The first line of all your files should be exactly #!/usr/bin/env python3
     A README.md file, at the root of the folder of the project, is mandatory
     Your code should use the pycodestyle style (version 2.4)
@@ -119,17 +110,64 @@ At the end of this project, you are expected to be able to explain to anyone, wi
     Unless otherwise noted, you are not allowed to import any module except import numpy as np
     Unless otherwise noted, you are not allowed to use any loops (for, while, etc.)
     All your files must be executable
-    The length of your files will be tested using wc
 
-## More Info
-Matrix Multiplications
+## Execution
+- To execute examples for each task, run the *xx-main.py* file related.
+- Download training files from ../data/ (i.e.: Binary_Train.npz, Binary_Dev.npz, MNIST.npz)
+- For tasks 27 and 28, download trained models from:
+https://s3.amazonaws.com/intranet-projects-files/holbertonschool-ml/27-saved.pkl
+  and
+  https://s3.amazonaws.com/intranet-projects-files/holbertonschool-ml/28-saved.pkl
 
-For all matrix multiplications in the following tasks, please use numpy.matmul
+
+## Tasks
+
+0. Neuron
+1. Privatize Neuron
+2. Neuron Forward Propagation
+3. Neuron Cost
+4. Evaluate Neuron
+5. Neuron Gradient Descent
+6. Train Neuron
+7. Upgrade Train Neuron **(perceptron)**
+
+
+8. NeuralNetwork
+9. Privatize NeuralNetwork
+10. NeuralNetwork Forward Propagation
+11. NeuralNetwork Cost
+12. Evaluate NeuralNetwork
+13. NeuralNetwork Gradient Descent
+14. Train NeuralNetwork
+15. Upgrade Train NeuralNetwork **(one layer binary classification)**
+
+
+16. DeepNeuralNetwork
+17. Privatize DeepNeuralNetwork
+18. DeepNeuralNetwork Forward Propagation
+19. DeepNeuralNetwork Cost
+20. Evaluate DeepNeuralNetwork
+21. DeepNeuralNetwork Gradient Descent
+22. Train DeepNeuralNetwork
+23. Upgrade Train DeepNeuralNetwork **(binary classificator)**
+
+
+24. One-Hot Encode
+25. One-Hot Decode
+
+
+26. Persistence is Key (pickle)
+
+
+27. Update DeepNeuralNetwork
+28. All the Activations **(multiclass classification)**
+
+
 
 ## Built With
 
 * Python 3.6
-* Pycharm 2020.2
+* Pycharm 2021
 * PycodeStyle
 
 ## Author
