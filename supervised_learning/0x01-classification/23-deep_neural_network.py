@@ -2,6 +2,7 @@
 """ 0x01. Classification """
 import numpy as np
 import matplotlib.pyplot as plt
+from math import exp
 
 
 def sigmoid(x):
@@ -12,7 +13,10 @@ def sigmoid(x):
     :param x: int or array. Use math.ext instead of np.exp for integers.
     :return: sigmoid function of x
     """
-    return np.exp(-np.logaddexp(0., -x))
+    if isinstance(x, int):
+        return exp(-np.logaddexp(0., -x))
+    else:
+        return np.exp(-np.logaddexp(0., -1 * x))
 
 
 class DeepNeuralNetwork:
@@ -74,12 +78,14 @@ class DeepNeuralNetwork:
         """
 
         self.cache["A0"] = X
+
         for i in range(1, self.L + 1):
             self.cache["A" + str(i)] = sigmoid(
                 np.matmul(self.weights["W" + str(i)],
                           self.cache["A" + str(i - 1)])
                 + self.weights["b" + str(i)]
             )
+
         return self.cache["A" + str(self.L)], self.cache
 
     def cost(self, Y, A):
@@ -94,6 +100,7 @@ class DeepNeuralNetwork:
         :return: return average of the loss (error) function.
             loss function increase in the opposite sign the output is going.
         """
+
         return (-1 / Y.shape[1]) *\
             np.sum(Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
 
@@ -110,10 +117,12 @@ class DeepNeuralNetwork:
             predicted labels for each example and the label values should be 1
             if the output of the network is >= 0.5 and 0 otherwise
         """
+
         self.forward_prop(X)
         return np.heaviside(
-            self.cache["A" + str(self.L)] - 0.5, 1
-        ).astype(int), self.cost(Y, self.cache["A" + str(self.L)])
+                            self.cache["A" + str(self.L)] - 0.5, 1
+                            ).astype(int),\
+            self.cost(Y, self.cache["A" + str(self.L)])
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
@@ -138,7 +147,8 @@ class DeepNeuralNetwork:
             self.weights['W' + str(i)] -= (alpha * dW).T
             self.weights['b' + str(i)] -= (alpha * db)
 
-    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True, graph=True, step=100):
+    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True,
+              graph=True, step=100):
         """
         Trains the neuron.
         Updates the private attributes __weights and __cache
@@ -156,6 +166,7 @@ class DeepNeuralNetwork:
         :return: the evaluation of the training data after iterations of
             training have occurred
         """
+
         if not isinstance(iterations, int):
             raise TypeError('iterations must be an integer')
         if iterations < 1:
@@ -174,11 +185,11 @@ class DeepNeuralNetwork:
         steps = np.arange(0, iterations + 1, step)
         for i in range(iterations + 1):
             self.forward_prop(X)
+            self.gradient_descent(Y, self.cache, alpha)
             if verbose and i % step == 0:
                 cost = self.cost(Y, self.cache["A" + str(self.L)])
                 print("Cost after {} iterations: {}".format(i, cost))
                 costs.append(cost)
-            self.gradient_descent(Y, self.cache, alpha)
 
         if graph:
             plt.plot(steps, costs)
@@ -186,4 +197,5 @@ class DeepNeuralNetwork:
             plt.xlabel("iteration")
             plt.ylabel("cost")
             plt.show()
+
         return self.evaluate(X, Y)
