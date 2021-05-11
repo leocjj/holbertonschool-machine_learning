@@ -184,7 +184,8 @@ class DeepNeuralNetwork:
             self.weights['W' + str(i)] -= (alpha * dW).T
             self.weights['b' + str(i)] -= (alpha * db)
 
-    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True, graph=True, step=100):
+    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True,
+              graph=True, step=100):
         """
         Trains the neuron.
         Updates the private attributes __weights and __cache
