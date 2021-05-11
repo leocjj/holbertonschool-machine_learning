@@ -120,12 +120,7 @@ class DeepNeuralNetwork:
             predicted labels for each example and the label values should be 1
             if the output of the network is >= 0.5 and 0 otherwise
         """
-        '''
-        self.forward_prop(X)
-        return np.heaviside(
-            self.__cache["A" + str(self.__L)] - 0.5, 1
-        ).astype(int), self.cost(Y, self.__cache["A" + str(self.__L)])
-        '''
+
         self.forward_prop(X)
         key = "A" + str(self.__L)
         return np.where(
