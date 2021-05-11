@@ -75,9 +75,9 @@ class DeepNeuralNetwork:
         :return: the output of the neural network and the cache, respectively.
         """
 
-        self.__cache["A0"] = X
+        self.cache["A0"] = X
         for i in range(1, self.L + 1):
-            self.__cache["A" + str(i)] = sigmoid(
+            self.cache["A" + str(i)] = sigmoid(
                 np.matmul(self.weights["W" + str(i)],
                           self.cache["A" + str(i - 1)])
                 + self.weights["b" + str(i)]
@@ -132,17 +132,16 @@ class DeepNeuralNetwork:
         :return: Nothing.
         """
 
-        m = Y.shape[1]
-        dZ = cache['A' + str(self.__L)] - Y
-        m1 = (1 / m)
-        for i in range(self.__L, 0, -1):
+        dZ = cache['A' + str(self.L)] - Y
+        m1 = (1 / Y.shape[1])
+        for i in range(self.L, 0, -1):
             dW = m1 * np.matmul(cache['A' + str(i - 1)], dZ.T)
             db = m1 * np.sum(dZ, axis=1, keepdims=True)
-            dZ = np.matmul(self.__weights['W' + str(i)].T, dZ) *\
+            dZ = np.matmul(self.weights['W' + str(i)].T, dZ) *\
                 (cache['A' + str(i - 1)] * (1 - cache['A' + str(i - 1)]))
 
-            self.__weights['W' + str(i)] -= (alpha * dW).T
-            self.__weights['b' + str(i)] -= (alpha * db)
+            self.weights['W' + str(i)] -= (alpha * dW).T
+            self.weights['b' + str(i)] -= (alpha * db)
 
     def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True,
               graph=True, step=100):
