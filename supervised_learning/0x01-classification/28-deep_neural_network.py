@@ -152,11 +152,11 @@ class DeepNeuralNetwork:
         """
 
         self.forward_prop(X)
-        key = "A" + str(self.L)
         return np.where(
-                        self.cache[key] ==
-                        np.amax(self.cache[key], axis=0), 1, 0
-                        ), self.cost(Y, self.cache[key])
+                        self.cache["A" + str(self.L)] ==
+                        np.amax(self.cache["A" + str(self.L)], axis=0), 1, 0
+                        ),\
+            self.cost(Y, self.cache["A" + str(self.L)])
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
@@ -184,8 +184,7 @@ class DeepNeuralNetwork:
             self.weights['W' + str(i)] -= (alpha * dW).T
             self.weights['b' + str(i)] -= (alpha * db)
 
-    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True,
-              graph=True, step=100):
+    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True, graph=True, step=100):
         """
         Trains the neuron.
         Updates the private attributes __weights and __cache
