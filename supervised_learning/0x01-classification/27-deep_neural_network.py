@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pickle import dump, load
 from os.path import isfile
+from math import exp
 
 
 def sigmoid(x):
@@ -14,7 +15,10 @@ def sigmoid(x):
     :param x: int or array. Use math.ext instead of np.exp for integers.
     :return: sigmoid function of x
     """
-    return np.exp(-np.logaddexp(0., -x))
+    if isinstance(x, int):
+        return exp(-np.logaddexp(0., -x))
+    else:
+        return np.exp(-np.logaddexp(0., -1 * x))
 
 
 class DeepNeuralNetwork:
@@ -23,7 +27,7 @@ class DeepNeuralNetwork:
 
     def __init__(self, nx, layers):
         """
-        Defines a deep neural network performing binary classification.
+        Defines a deep neural network performing multi-class classification.
         :param nx:  is the number of input features.
         :param layers: list with the number of nodes for each layer.
         """
@@ -90,6 +94,7 @@ class DeepNeuralNetwork:
             else:
                 # Hidden layers activation function: sigmoid
                 self.cache["A" + str(i)] = sigmoid(z)
+
         return self.cache["A" + str(self.L)], self.cache
 
     def cost(self, Y, A):
@@ -122,11 +127,11 @@ class DeepNeuralNetwork:
         """
 
         self.forward_prop(X)
-        key = "A" + str(self.L)
         return np.where(
-                        self.cache[key] ==
-                        np.amax(self.cache[key], axis=0), 1, 0
-                        ), self.cost(Y, self.cache[key])
+                        self.cache["A" + str(self.L)] ==
+                        np.amax(self.cache["A" + str(self.L)], axis=0), 1, 0
+                        ),\
+            self.cost(Y, self.cache["A" + str(self.L)])
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
