@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pickle import dump, load
 from os.path import isfile
+from math import exp
 
 
 def sigmoid(x):
@@ -14,7 +15,10 @@ def sigmoid(x):
     :param x: int or array. Use math.ext instead of np.exp for integers.
     :return: sigmoid function of x
     """
-    return np.exp(-np.logaddexp(0., -x))
+    if isinstance(x, int):
+        return exp(-np.logaddexp(0., -x))
+    else:
+        return np.exp(-np.logaddexp(0., -1 * x))
 
 
 class DeepNeuralNetwork:
@@ -76,6 +80,7 @@ class DeepNeuralNetwork:
         """
 
         self.cache["A0"] = X
+
         for i in range(1, self.L + 1):
             self.cache["A" + str(i)] = sigmoid(
                 np.matmul(self.weights["W" + str(i)],
@@ -117,8 +122,9 @@ class DeepNeuralNetwork:
 
         self.forward_prop(X)
         return np.heaviside(
-            self.cache["A" + str(self.L)] - 0.5, 1
-        ).astype(int), self.cost(Y, self.cache["A" + str(self.L)])
+                            self.cache["A" + str(self.L)] - 0.5, 1
+                            ).astype(int),\
+            self.cost(Y, self.cache["A" + str(self.L)])
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
@@ -178,14 +184,14 @@ class DeepNeuralNetwork:
                 raise ValueError('step must be positive and <= iterations')
 
         costs = []
-        steps = np.arange(0, iterations, step)
-        for i in range(iterations):
+        steps = np.arange(0, iterations + 1, step)
+        for i in range(iterations + 1):
             self.forward_prop(X)
+            self.gradient_descent(Y, self.cache, alpha)
             if verbose and i % step == 0:
                 cost = self.cost(Y, self.cache["A" + str(self.L)])
                 print("Cost after {} iterations: {}".format(i, cost))
                 costs.append(cost)
-            self.gradient_descent(Y, self.cache, alpha)
 
         if graph:
             plt.plot(steps, costs)
