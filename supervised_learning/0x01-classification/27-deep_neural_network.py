@@ -75,22 +75,22 @@ class DeepNeuralNetwork:
         :return: the output of the neural network and the cache, respectively.
         """
 
-        self.__cache["A0"] = X
+        self.cache["A0"] = X
 
-        for i in range(1, self.__L + 1):
+        for i in range(1, self.L + 1):
             z = np.matmul(
-                          self.__weights["W" + str(i)],
-                          self.__cache["A" + str(i - 1)])\
-                + self.__weights["b" + str(i)]
+                          self.weights["W" + str(i)],
+                          self.cache["A" + str(i - 1)])\
+                + self.weights["b" + str(i)]
 
-            if i == self.__L:
+            if i == self.L:
                 # Output layer activation function: softmax
-                self.__cache["A" + str(i)] =\
+                self.cache["A" + str(i)] =\
                     np.exp(z) / np.sum(np.exp(z), axis=0, keepdims=True)
             else:
                 # Hidden layers activation function: sigmoid
-                self.__cache["A" + str(i)] = sigmoid(z)
-        return self.__cache["A" + str(self.__L)], self.__cache
+                self.cache["A" + str(i)] = sigmoid(z)
+        return self.cache["A" + str(self.L)], self.cache
 
     def cost(self, Y, A):
         """
@@ -122,11 +122,11 @@ class DeepNeuralNetwork:
         """
 
         self.forward_prop(X)
-        key = "A" + str(self.__L)
+        key = "A" + str(self.L)
         return np.where(
-                        self.__cache[key] ==
-                        np.amax(self.__cache[key], axis=0), 1, 0
-                        ), self.cost(Y, self.__cache[key])
+                        self.cache[key] ==
+                        np.amax(self.cache[key], axis=0), 1, 0
+                        ), self.cost(Y, self.cache[key])
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
@@ -140,17 +140,16 @@ class DeepNeuralNetwork:
         :return: Nothing.
         """
 
-        m = Y.shape[1]
-        dZ = cache['A' + str(self.__L)] - Y
-        m1 = (1 / m)
-        for i in range(self.__L, 0, -1):
+        dZ = cache['A' + str(self.L)] - Y
+        m1 = (1 / Y.shape[1])
+        for i in range(self.L, 0, -1):
             dW = m1 * np.matmul(cache['A' + str(i - 1)], dZ.T)
             db = m1 * np.sum(dZ, axis=1, keepdims=True)
-            dZ = np.matmul(self.__weights['W' + str(i)].T, dZ) *\
+            dZ = np.matmul(self.weights['W' + str(i)].T, dZ) *\
                 (cache['A' + str(i - 1)] * (1 - cache['A' + str(i - 1)]))
 
-            self.__weights['W' + str(i)] -= (alpha * dW).T
-            self.__weights['b' + str(i)] -= (alpha * db)
+            self.weights['W' + str(i)] -= (alpha * dW).T
+            self.weights['b' + str(i)] -= (alpha * db)
 
     def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True,
               graph=True, step=100):
@@ -191,10 +190,10 @@ class DeepNeuralNetwork:
         for i in range(iterations):
             self.forward_prop(X)
             if verbose and i % step == 0:
-                cost = self.cost(Y, self.__cache["A" + str(self.__L)])
+                cost = self.cost(Y, self.cache["A" + str(self.L)])
                 print("Cost after {} iterations: {}".format(i, cost))
                 costs.append(cost)
-            self.gradient_descent(Y, self.__cache, alpha)
+            self.gradient_descent(Y, self.cache, alpha)
 
         if graph:
             plt.plot(steps, costs)
