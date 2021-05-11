@@ -219,14 +219,14 @@ class DeepNeuralNetwork:
                 raise ValueError('step must be positive and <= iterations')
 
         costs = []
-        steps = np.arange(0, iterations, step)
-        for i in range(iterations):
+        steps = np.arange(0, iterations + 1, step)
+        for i in range(iterations + 1):
             self.forward_prop(X)
+            self.gradient_descent(Y, self.cache, alpha)
             if verbose and i % step == 0:
                 cost = self.cost(Y, self.cache["A" + str(self.L)])
                 print("Cost after {} iterations: {}".format(i, cost))
                 costs.append(cost)
-            self.gradient_descent(Y, self.cache, alpha)
 
         if graph:
             plt.plot(steps, costs)
