@@ -162,6 +162,8 @@ https://s3.amazonaws.com/intranet-projects-files/holbertonschool-ml/27-saved.pkl
 27. Update DeepNeuralNetwork
 28. All the Activations **(multiclass classification)**
 
+29. Activation functions:
+https://www.linkedin.com/pulse/activation-functions-neural-networks-leonardo-calderon-j-
 
 
 ## Built With
