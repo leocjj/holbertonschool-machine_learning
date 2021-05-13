@@ -38,6 +38,7 @@ def logmoid(z):
 def logmoid_inv(A):
     """
     Piecewise-defined function to calculate the inverse of logmoid.
+    i.e.: the output of the neuron before the activation function.
     :param A: int or array. Use math.log instead of np.log for integers.
     :return: inverse logmoid function of A
     """
