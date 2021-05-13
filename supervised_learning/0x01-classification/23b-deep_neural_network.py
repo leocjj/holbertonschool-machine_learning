@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 """ 0x01. Classification """
-import math
-
 import numpy as np
 import matplotlib.pyplot as plt
 from math import exp, log
