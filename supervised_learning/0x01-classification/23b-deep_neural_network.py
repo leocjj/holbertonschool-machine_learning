@@ -43,11 +43,12 @@ def logmoid_inv(A):
     """
     if isinstance(A, int):
         if A < 0:
-            return 1 - math.exp(-A)
+            return 1 - exp(-A)
         else:
-            return -1 + math.exp(A)
+            return -1 + exp(A)
     else:
         return np.where(A < 0, 1 - np.exp(-A), -1 + np.exp(A))
+
 
 class DeepNeuralNetwork:
     """ Class that defines a deep neural network performing binary
@@ -131,9 +132,11 @@ class DeepNeuralNetwork:
             loss function increase in the opposite sign the output is going.
         """
 
-        #return (-1 / Y.shape[1]) * np.sum(Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
-        return (-1 / Y.shape[1]) * np.sum(Y * np.exp(-A) + (1 - Y) * np.exp(A - 1))
+        # Cost function for sigmoid
+        # return (-1 / Y.shape[1]) * np.sum(Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
 
+        # Cost function for logmoid
+        return (-1 / Y.shape[1]) * np.sum(Y * np.exp(-A) + (1 - Y) * np.exp(A - 1))
 
     def evaluate(self, X, Y):
         """
