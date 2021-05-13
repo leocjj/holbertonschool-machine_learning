@@ -136,7 +136,7 @@ class DeepNeuralNetwork:
         # Cost function for sigmoid
         # return (-1 / Y.shape[1]) * np.sum(Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
 
-        # Cost function for logmoid
+        # Cost function for logmoid to avoid invalid values for log().
         return (-1 / Y.shape[1]) * np.sum(Y * np.exp(-A) + (1 - Y) * np.exp(A - 1))
 
     def evaluate(self, X, Y):
@@ -176,18 +176,32 @@ class DeepNeuralNetwork:
         for i in range(self.L, 0, -1):
             dW = m1 * np.matmul(cache['A' + str(i - 1)], dZ.T)
             db = m1 * np.sum(dZ, axis=1, keepdims=True)
-            # A_fx_fz = cache['A' + str(i - 1)]
-            # dZ = (Wi * dZ).dA ,  dA is the derivative of activation function.
+
+            ''' dZ = (Wi * dZ).dA '''
             dZ = np.matmul(self.weights['W' + str(i)].T, dZ)
 
-            # For tanh, use this derivative
-            # dZ *= (1 - A_fz ** 2)
+            '''
+            A or fx or fz is the output of the activation function.
+                A_fx_fz = cache['A' + str(i - 1)]
+            dA is the derivative of activation function.            
+            For sigmoid is (fz * (1 - fz))
+                dZ *= (cache['A' + str(i - 1)] * (1 - cache['A' + str(i - 1)]))
+            For tanh is (1 - fz^2)
+                dZ *= (1 - cache['A{}'.format(i - 1)] ** 2)
+            For logmoid is: (1 / (1 - z)) if z < 0, (1 / (1 + z)) if z >= 0
+                dZ *= np.where(z < 0, np.power(1 - z, -1), np.power(1 + z, -1))
+            '''
 
-            # Derivative of logmoid function
-            # z = np.matmul(self.weights["W" + str(i - 1)], self.cache["A" + str(i - 2)])\
-            #     + self.weights["b" + str(i - 1)]
-            # dZ *= np.where(z < 0, np.power(1 - z, -1),  np.power(1 + z, -1))
-
+            '''
+            # DERIVATIVE OF LOGMOID FUNCTION
+            z = np.matmul(self.weights["W" + str(i - 1)], self.cache["A" + str(i - 2)])\
+                + self.weights["b" + str(i - 1)]
+            dZ *= np.where(z < 0, np.power(1 - z, -1),  np.power(1 + z, -1))
+            z can't be calculated this way for i = 1, because W0 and A-1 don't exist.
+            So logmoid_inv is used instead to calculate previous z, i.e. the
+            value before the activation function is the inverse of the output
+            of the activation function.
+            '''
             z = logmoid_inv(cache['A' + str(i - 1)])
             dZ *= np.where(z < 0, np.power(1 - z, -1), np.power(1 + z, -1))
 
