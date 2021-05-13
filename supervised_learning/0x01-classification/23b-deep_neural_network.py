@@ -28,9 +28,9 @@ def logmoid(z):
     """
     if isinstance(z, int):
         if z < 0:
-            return -math.log(1 - z)
+            return -log(1 - z)
         else:
-            return +math.log(1 + z)
+            return +log(1 + z)
     else:
         return np.where(z < 0, -np.log(1 - z), np.log(1 + z))
 
