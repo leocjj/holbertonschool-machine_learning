@@ -150,6 +150,7 @@ https://s3.amazonaws.com/intranet-projects-files/holbertonschool-ml/27-saved.pkl
 21. DeepNeuralNetwork Gradient Descent
 22. Train DeepNeuralNetwork
 23. Upgrade Train DeepNeuralNetwork **(binary classificator)**
+23b. Upgrade Train DeepNeuralNetwork **(binary classificator with LOGMOID activation function)**
 
 
 24. One-Hot Encode
