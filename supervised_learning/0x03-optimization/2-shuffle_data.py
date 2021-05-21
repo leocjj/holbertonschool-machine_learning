@@ -5,7 +5,7 @@ import numpy as np
 
 def shuffle_data(X, Y):
     """
-    Normalizes (standardizes) a matrix:
+    shuffles the data points in two matrices the same way:
     :param X: is the numpy.ndarray of shape (m, nx) to normalize
         m is the number of data points
         nx is the number of features
