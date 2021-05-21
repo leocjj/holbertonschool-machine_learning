@@ -47,8 +47,6 @@ def forward_prop(x, layer_sizes=[], activations=[]):
     for i in range(1, len(layer_sizes)):
         layer = create_layer(layer, layer_sizes[i], activations[i])
 
-    return layer
-
 
 def calculate_accuracy(y, y_pred):
     """
@@ -64,38 +62,15 @@ def calculate_accuracy(y, y_pred):
     return accuracy
 
 
-def learning_rate_decay(alpha, decay_rate, global_step, decay_step):
+def calculate_loss(y, y_pred):
     """
-    Updates the learning rate using inverse time decay in numpy:
-    The learning rate decay should occur in a stepwise fashion.
-    :param alpha: learning rate
-    :param decay_rate: used to determine the rate at which alpha will decay
-    :param global_step: number of passes of gradient descent that have elapsed
-    :param decay_step: number of passes of gradient descent that should occur
-        before alpha is decayed further
-    :return: updated value for alpha
+    Function that calculates the softmax cross-entropy loss of a prediction.
+    :param y: is a placeholder for the labels of the input data.
+    :param y_pred: is a tensor containing the network’s predictions.
+    :return: a tensor containing the loss of the prediction.
     """
 
-    alpha /= 1 + decay_rate * np.floor(global_step / decay_step)
-    return alpha
-
-
-def Adam_op(loss, alpha, beta1, beta2, epsilon):
-    """
-    creates the training operation for a neural network in tensorflow using
-        the Adam optimization algorithm:
-    :param loss: loss of the network
-    :param alpha: learning rate
-    :param beta1: weight used for the first moment
-    :param beta2: weight used for the second moment
-    :param epsilon: a small number to avoid division by zero
-    :return: Adam optimization operation
-    """
-
-    optimizer = tf.train.AdamOptimizer(alpha, beta1, beta2, epsilon)
-    adam = optimizer.minimize(loss)
-
-    return adam
+    return tf.losses.softmax_cross_entropy(y, y_pred)
 
 
 def shuffle_data(X, Y):
@@ -115,11 +90,76 @@ def shuffle_data(X, Y):
     return X[shuffler], Y[shuffler]
 
 
-def model(Data_train, Data_valid, layers, activations, alpha=0.001, beta1=0.9,
-          beta2=0.999, epsilon=1e-8, decay_rate=1, batch_size=32, epochs=5,
-          save_path='/tmp/model.ckpt'):
+def learning_rate_decay(alpha, decay_rate, global_step, decay_step):
+    """
+    Creates a learning rate decay operation in tensorflow using inverse time
+    decay. The learning rate decay should occur in a stepwise fashion.
+    :param alpha: original learning rate
+    :param decay_rate: used to determine the rate at which alpha will decay
+    :param global_step: number of passes of gradient descent that have elapsed
+    :param decay_step: number of passes of gradient descent that should occur
+        before alpha is decayed further
+    :return: learning rate decay operation
     """
 
+    lrd_op = tf.train.inverse_time_decay(alpha, global_step, decay_step,
+                                         decay_rate, staircase=True)
+
+    return lrd_op
+
+
+def create_Adam_op(loss, alpha, beta1, beta2, epsilon):
+    """
+    creates the training operation for a neural network in tensorflow using
+        the Adam optimization algorithm:
+    :param loss: loss of the network
+    :param alpha: learning rate
+    :param beta1: weight used for the first moment
+    :param beta2: weight used for the second moment
+    :param epsilon: a small number to avoid division by zero
+    :return: Adam optimization operation
+    """
+
+    optimizer = tf.train.AdamOptimizer(alpha, beta1, beta2, epsilon)
+    adam = optimizer.minimize(loss)
+
+    return adam
+
+
+def create_batch_norm_layer(prev, n, activation):
+    """
+    Creates a batch normalization layer for a neural network in tensorflow:
+        Your layer should incorporate two trainable parameters, gamma and beta,
+        initialized as vectors of 1 and 0 respectively. You should use an
+        epsilon of 1e-8
+    :param prev: activated output of the previous layer
+    :param n: number of nodes in the layer to be created
+    :param activation: activation function that should be used on the output
+        of the layer
+    :return: tensor of the activated output for the layer
+    """
+
+    init = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
+    y = tf.layers.Dense(units=n, kernel_initializer=init, name='layer')
+    x = y(prev)
+
+    mean, variance = tf.nn.moments(x, axes=[0])
+    gamma = tf.Variable(tf.constant(1.0, shape=[n]), trainable=True)
+    beta = tf.Variable(tf.constant(0.0, shape=[n]), trainable=True)
+    epsilon = 1e-8
+
+    norma = tf.nn.batch_normalization(x, mean, variance, beta, gamma, epsilon)
+
+    return activation(norma)
+
+
+def model(Data_train, Data_valid, layers, activations, alpha=0.001,
+          beta1=0.9, beta2=0.999, epsilon=1e-8, decay_rate=1,
+          batch_size=32, epochs=5, save_path='/tmp/model.ckpt'):
+    """
+    Builds, trains, and saves a neural network model in tensorflow using Adam
+    optimization, mini-batch gradient descent, learning rate decay, and batch
+    normalization:
     :param Data_train:
     :param Data_valid:
     :param layers:
@@ -135,82 +175,103 @@ def model(Data_train, Data_valid, layers, activations, alpha=0.001, beta1=0.9,
     :return:
     """
 
-    # create placeholders
-    x, y = create_placeholders(Data_train[0].shape[1], Data_train[1].shape[1])
-    # forward propagation
-    y_pred = forward_prop(x, layers, activations)
-    # accuracy
-    accuracy = calculate_accuracy(y, y_pred)
-    # loss with softmax entropy
-    loss = tf.losses.softmax_cross_entropy(y, y_pred)
+    X_train = Data_train[0]
+    Y_train = Data_train[1]
+    X_valid = Data_valid[0]
+    Y_valid = Data_valid[1]
 
-    # learning rate decay
-    global_step = tf.Variable(0, trainable=False)
-    increment_global_step = tf.assign(global_step, global_step + 1)
-    alpha_tr = learning_rate_decay(alpha, decay_rate, global_step, 1)
+    steps = X_train.shape[0] / batch_size
+    if (steps).is_integer() is True:
+        steps = int(steps)
+    else:
+        steps = int(steps) + 1
 
-    # train
-    train_op = Adam_op(loss, alpha_tr, beta1, beta2, epsilon)
-
-    # add to graph’s collection
+    x = tf.placeholder(tf.float32, shape=[None, X_train.shape[1]], name='x')
     tf.add_to_collection('x', x)
+
+    y = tf.placeholder(tf.float32, shape=[None, Y_train.shape[1]], name='y')
     tf.add_to_collection('y', y)
+
+    y_pred = forward_prop(x, layers, activations)
     tf.add_to_collection('y_pred', y_pred)
-    tf.add_to_collection('accuracy', accuracy)
+
+    loss = calculate_loss(y, y_pred)
     tf.add_to_collection('loss', loss)
+
+    accuracy = calculate_accuracy(y, y_pred)
+    tf.add_to_collection('accuracy', accuracy)
+
+    global_step = tf.Variable(0, trainable=False)
+    alpha = learning_rate_decay(alpha, decay_rate, global_step, 1)
+
+    train_op = create_Adam_op(loss, alpha, beta1, beta2, epsilon)
     tf.add_to_collection('train_op', train_op)
-    # Create a saver.
-    saver = tf.train.Saver()
-    # initialize variables
+
     init = tf.global_variables_initializer()
+    # Add ops to save/restore variables.
+    saver = tf.train.Saver()
 
-    # define number of steps
-    steps = round(Data_train[0].shape[0] / batch_size)
-    length = Data_train[0].shape[0]
+    with tf.Session() as sess:
+        sess.run(init)
 
-    with tf.Session() as session:
-        session.run(init)
         for epoch in range(epochs + 1):
-            feed_dict = {x: Data_train[0], y: Data_train[1]}
-            # train values
-            t_accur = session.run(accuracy, feed_dict)
-            t_loss = session.run(loss, feed_dict)
-            # valid values
-            vaccur = session.run(accuracy, feed_dict={x: Data_valid[0],
-                                                      y: Data_valid[1]})
-            v_loss = session.run(loss, feed_dict={x: Data_valid[0],
-                                                  y: Data_valid[1]})
-            print('After {} epochs:'.format(epoch))
-            print('\tTraining Cost: {}'.format(t_loss))
-            print('\tTraining Accuracy: {}'.format(t_accur))
-            print('\tValidation Cost: {}'.format(v_loss))
-            print('\tValidation Accuracy: {}'.format(vaccur))
-            if epoch != epochs:
-                # pointer where
-                start = 0
-                end = batch_size
-                # shuffle training data before each epoch
-                X_trainS, Y_trainS = shuffle_data(Data_train[0], Data_train[1])
-                for step in range(1, steps + 2):
-                    # slice train data according to mini bach size every
-                    train_batch = X_trainS[start:end]
-                    train_label = Y_trainS[start:end]
-                    feed_dict = {x: train_batch, y: train_label}
-                    # run train operation
-                    # b_train = session.run(train_op, feed_dict)
-                    if step % 100 == 0:
-                        # compute cost and accuracy every 100 steps
-                        b_cost = session.run(loss, feed_dict)
-                        b_accuracy = session.run(accuracy, feed_dict)
-                        print('\tStep {}:'.format(step))
-                        print('\t\tCost: {}'.format(b_cost))
-                        print('\t\tAccuracy: {}'.format(b_accuracy))
-                    # increment point to slice according to batch size
-                    start = start + batch_size
-                    if (length - start) < batch_size:
-                        end = end + (length - start)
-                    else:
-                        end = end + batch_size
-            # increment global_step for learning decay and train ops
-            session.run(increment_global_step)
-        return saver.save(session, save_path)
+            # execute cost and accuracy operations for training set
+            train_cost, train_accuracy = sess.run(
+                [loss, accuracy],
+                feed_dict={x: X_train, y: Y_train})
+
+            # execute cost and accuracy operations for validation set
+            valid_cost, valid_accuracy = sess.run(
+                [loss, accuracy],
+                feed_dict={x: X_valid, y: Y_valid})
+
+            print("After {} epochs:".format(epoch))
+            print("\tTraining Cost: {}".format(train_cost))
+            print("\tTraining Accuracy: {}".format(train_accuracy))
+            print("\tValidation Cost: {}".format(valid_cost))
+            print("\tValidation Accuracy: {}".format(valid_accuracy))
+
+            if epoch < epochs:
+                # learning rate decay
+                sess.run(global_step.assign(epoch))
+                # update learning rate
+                sess.run(alpha)
+
+                # shuffle data, both training set and labels
+                X_shuffled, Y_shuffled = shuffle_data(X_train, Y_train)
+
+                # mini-batch within epoch
+                for step_number in range(steps):
+
+                    # data selection mini batch from training set and labels
+                    start = step_number * batch_size
+
+                    end = (step_number + 1) * batch_size
+                    if end > X_train.shape[0]:
+                        end = X_train.shape[0]
+
+                    X = X_shuffled[start:end]
+                    Y = Y_shuffled[start:end]
+
+                    # execute training for step
+                    sess.run(train_op, feed_dict={x: X, y: Y})
+
+                    if step_number != 0 and (step_number + 1) % 100 == 0:
+                        # step_number is the number of times gradient
+                        # descent has been run in the current epoch
+                        print("\tStep {}:".format(step_number + 1))
+
+                        # calculate cost and accuracy for step
+                        step_cost, step_accuracy = sess.run(
+                            [loss, accuracy],
+                            feed_dict={x: X, y: Y})
+
+                        # step_cost is the cost of the model
+                        # on the current mini-batch
+                        print("\t\tCost: {}".format(step_cost))
+
+                        # step_accuracy is the accuracy of the model
+                        # on the current mini-batch
+                        print("\t\tAccuracy: {}".format(step_accuracy))
+
+        return saver.save(sess, save_path)
