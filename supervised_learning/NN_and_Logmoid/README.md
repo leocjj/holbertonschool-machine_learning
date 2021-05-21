@@ -24,14 +24,10 @@ https://s3.amazonaws.com/intranet-projects-files/holbertonschool-ml/27-saved.pkl
 
 1. **Perceptron - One neuron Neural Network (NN)**
 2. **One layer NN - binary classification**
-3. **(binary classificator)**
-23b. Upgrade Train DeepNeuralNetwork **(binary classificator with LOGMOID activation function)**
+3. **Multi layer NN (deep neural network) - binary classificator**
 
-24. One-Hot Encode
-25. One-Hot Decode
-
-26. Persistence is Key (pickle)
-
+24-One-Hot Encode
+25-One-Hot Decode
 27. Update DeepNeuralNetwork
 28. All the Activations **(multiclass classification)**
 
