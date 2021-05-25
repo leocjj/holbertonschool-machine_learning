@@ -20,4 +20,5 @@ def specificity(confusion):
     PP = np.sum(confusion, axis=0)
     P = np.sum(confusion, axis=1)
 
+    # TNR = TN / N
     return (ALL - PP - P + TP) / (ALL - P)
