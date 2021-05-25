@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" 0x03. Optimization """
+""" 0x04. Error Analysis """
 
 import numpy as np
 
