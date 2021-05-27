@@ -20,17 +20,14 @@ def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
     :return: None. Weights and biases of the network should be updated in place
     """
 
-    # ERROR
-    dz = cache['A' + str(L)] - Y
-    # FACTOR TO DIVIDE BY NUMBER OF INPUT DATA
-    m = (Y.shape[1])
+    dZ = cache['A' + str(L)] - Y
+    m1 = (1 / Y.shape[1])
     for i in range(L, 0, -1):
-        cost_L2 = (lambtha / m) * weights['W'+str(i)]
-        db = (1 / m) * np.sum(dz, axis=1, keepdims=True)
-        dW = ((1 / m) * np.matmul(dz, cache['A'+str(i-1)].T)) + cost_L2
-        dz = np.matmul(weights['W'+str(i)].T, dz) *\
-            ((1 - cache['A'+str(i-1)] ** 2))
-        weights['W'+str(i)] = weights['W'+str(i)] -\
-            (alpha * dW)
-        weights['b'+str(i)] = weights['b'+str(i)] -\
-            (alpha * db)
+        cost_L2 = (lambtha * m1) * weights['W{}'.format(i)]
+        dW = m1 * np.matmul(dZ, cache['A' + str(i - 1)].T) + cost_L2
+        db = m1 * np.sum(dZ, axis=1, keepdims=True)
+        weights['W' + str(i)] -= (alpha * dW)
+        weights['b' + str(i)] -= (alpha * db)
+        dZ = np.matmul(weights['W' + str(i)].T, dZ)
+        A = cache['A' + str(i - 1)]
+        dZ *= (1 - np.power(A, 2))
