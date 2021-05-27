@@ -20,8 +20,10 @@ def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
     :return: None. Weights and biases of the network should be updated in place
     """
 
-    dZ = cache['A' + str(L)] - Y  # ERROR
-    m1 = (1 / Y.shape[1])  # FACTOR TO DIVIDE BY NUMBER OF INPUT DATA
+    # ERROR
+    dZ = cache['A' + str(L)] - Y
+    # FACTOR TO DIVIDE BY NUMBER OF INPUT DATA
+    m1 = (1 / Y.shape[1])
     for i in range(L, 0, -1):
         ''' BACKPROPAGATION USING GRADIENT DESCENT PLUS REGULARIZATION TERM'''
         cost_L2 = (lambtha * m1) * weights['W{}'.format(i)]
@@ -32,5 +34,7 @@ def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
         ''' dZ = (Wi * dZ).dA, dA is the activation function derivative.'''
         dZ = np.matmul(weights['W' + str(i)].T, dZ)
         ''' Apply activation function derivative (gradient). '''
-        A = cache['A' + str(i - 1)]  # output of the activation function.
-        dZ *= (1 - np.power(A, 2))  # f'(x) = 1 - f(x)^2
+        # output of the activation function.
+        A = cache['A' + str(i - 1)]
+        # f'(x) = 1 - f(x)^2
+        dZ *= (1 - np.power(A, 2))
