@@ -23,7 +23,7 @@ def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
     # ERROR
     dz = cache['A' + str(L)] - Y
     # FACTOR TO DIVIDE BY NUMBER OF INPUT DATA
-    m1 = (1 / Y.shape[1])
+    m1 = (Y.shape[1])
     for i in range(L, 0, -1):
         cost_L2 = (lambtha / m) * weights['W'+str(i)]
         db = (1 / m) * np.sum(dz, axis=1, keepdims=True)
