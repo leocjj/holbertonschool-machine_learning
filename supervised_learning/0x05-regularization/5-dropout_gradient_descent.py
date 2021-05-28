@@ -37,8 +37,8 @@ def dropout_gradient_descent(Y, weights, cache, alpha, keep_prob, L):
         # output of the activation function.
         A = cache['A' + str(i - 1)]
         # f'(x) = 1 - f(x)^2
-        if 1 < i < L:
-            dZ *= (1 - np.power(A, 2)) * (cache['D' + str(i)] / keep_prob)
+        if i > 1:
+            dZ *= (1 - np.power(A, 2)) * (cache['D' + str(i - 1)] / keep_prob)
 
         weights['W' + str(i)] -= (alpha * dW)
         weights['b' + str(i)] -= (alpha * db)
