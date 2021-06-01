@@ -12,10 +12,8 @@ def save_config(network, filename):
     :return: None
     """
 
-    json_string = network.to_json()
-
     with open(filename, 'w') as f:
-        f.write(json_string)
+        f.write(network.to_json())
 
     return None
 
