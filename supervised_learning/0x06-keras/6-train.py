@@ -17,9 +17,10 @@ def train_model(network, data, labels, batch_size, epochs,
     :param epochs:number of passes through data for mini-batch gradient descent
     :param validation_data: the data to validate the model with, if not None.
     :param early_stopping: boolean that indicates whether early stopping should
-        be used. Should only be performed if validation_data exists. Should be
-        based on validation loss.
-    :param patience:
+        be used.
+        Should only be performed if validation_data exists.
+        Should be based on validation loss.
+    :param patience: the patience used for early stopping
     :param verbose: boolean, determines if output should be printed in training
     :param shuffle: boolean, determines whether to shuffle the batches every
         epoch. For reproducibility, set the default to False.
@@ -29,8 +30,7 @@ def train_model(network, data, labels, batch_size, epochs,
     callback = None
 
     if early_stopping and validation_data:
-        callback = [K.callbacks.EarlyStopping(monitor='val_loss',
-                                              patience=patience)]
+        callback = [K.callbacks.EarlyStopping(patience=patience)]
 
     return network.fit(x=data, y=labels, batch_size=batch_size,
                        epochs=epochs, verbose=verbose, callbacks=callback,
