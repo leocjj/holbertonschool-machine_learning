@@ -27,8 +27,8 @@ def train_model(network, data, labels, batch_size, epochs,
         The decay should be performed using inverse time decay
         the learning rate should decay in a stepwise fashion after each epoch
         each time the learning rate updates, Keras should print a message
-    :param alpha:
-    :param decay_rate:
+    :param alpha: the initial learning rate
+    :param decay_rate: the decay rate
     :param verbose: boolean, determines if output should be printed in training
     :param shuffle: boolean, determines whether to shuffle the batches every
         epoch. For reproducibility, set the default to False.
