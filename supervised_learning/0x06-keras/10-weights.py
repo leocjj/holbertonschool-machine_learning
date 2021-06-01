@@ -13,7 +13,7 @@ def save_weights(network, filename, save_format='h5'):
     :return: None
     """
 
-    network.saveweights(filename, save_format=save_format)
+    network.save_weights(filename, save_format=save_format)
     return None
 
 
