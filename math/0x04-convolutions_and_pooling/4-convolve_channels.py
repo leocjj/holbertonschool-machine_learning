@@ -5,7 +5,7 @@ import numpy as np
 
 def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
     """
-    images is a numpy.ndarray with shape (m, h, w, c) containing multiple images
+    images is numpy.ndarray with shape (m, h, w, c) containing multiple images
         m is the number of images
         h is the height in pixels of the images
         w is the width in pixels of the images
