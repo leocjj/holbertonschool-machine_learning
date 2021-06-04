@@ -5,6 +5,7 @@ import numpy as np
 
 def convolve_grayscale_valid(images, kernel):
     """
+    performs a valid convolution on grayscale images
     images is a numpy.ndarray with shape (m, h, w) containing multiple
         grayscale images:
         m is the number of images
