@@ -10,7 +10,8 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
         h is the height in pixels of the images
         w is the width in pixels of the images
         c is the number of channels in the image
-    kernel is a numpy.ndarray with shape (kh, kw, c) containing the kernel for the convolution
+    kernel is a numpy.ndarray with shape (kh, kw, c) containing the kernel for
+        the convolution
         kh is the height of the kernel
         kw is the width of the kernel
     padding is either a tuple of (ph, pw), ‘same’, or ‘valid’
