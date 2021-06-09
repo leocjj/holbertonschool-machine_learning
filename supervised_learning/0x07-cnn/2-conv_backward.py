@@ -32,18 +32,10 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     Returns: the partial derivatives with respect to the previous layer
         (dA_prev), the kernels (dW), and the biases (db), respectively
     """
-
-
-    h_dp = dZ.shape[1]
-    w_dp = dZ.shape[2]
-    m = A_prev.shape[0]
-    h_prev = A_prev.shape[1]
-    w_prev = A_prev.shape[2]
-    kh = W.shape[0]
-    kw = W.shape[1]
-    c_new = W.shape[3]
-    sh = stride[0]
-    sw = stride[1]
+    _, h_dp, w_dp, _ = dZ.shape
+    m, h_prev, w_prev, c_prev = A_prev.shape
+    kh, kw, c_prev, c_new = W.shape
+    sh, sw = stride
 
     if padding == 'valid':
         ph, pw = 0, 0
