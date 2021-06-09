@@ -44,7 +44,8 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
     height_conv = int(((h_prev - kh + (2 * pad_h)) / sh) + 1)
     width_conv = int(((w_prev - kw + (2 * pad_w)) / sw) + 1)
 
-    images = np.pad(A_prev, pad_width=((0, 0), (pad_h, pad_h), (pad_w, pad_w), (0, 0)),
+    images = np.pad(A_prev, pad_width=((0, 0), (pad_h, pad_h), (pad_w, pad_w),
+                                       (0, 0)),
                     mode='constant', constant_values=0)
 
     conv = np.zeros((m, height_conv, width_conv, c_new))
