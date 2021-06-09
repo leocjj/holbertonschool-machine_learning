@@ -33,48 +33,43 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
         (dA_prev), the kernels (dW), and the biases (db), respectively
     """
 
-    img_n = dZ.shape[0]
-    img_h = A_prev.shape[1]
-    img_w = A_prev.shape[2]
-    img_c_in = A_prev.shape[3]
-    img_c_out = dZ.shape[3]
 
-    ker_h = W.shape[0]
-    ker_w = W.shape[1]
+    h_dp = dZ.shape[1]
+    w_dp = dZ.shape[2]
+    m = A_prev.shape[0]
+    h_prev = A_prev.shape[1]
+    w_prev = A_prev.shape[2]
+    kh = W.shape[0]
+    kw = W.shape[1]
+    c_new = W.shape[3]
+    sh = stride[0]
+    sw = stride[1]
 
-    dZ_h = dZ.shape[1]
-    dZ_w = dZ.shape[2]
-
-    if isinstance(padding, tuple):
-        ph, pw = padding
-    elif padding == "same":
-        ph = int(np.ceil((img_h - 1) * stride[0] + ker_h - img_h) / 2)
-        pw = int(np.ceil((img_w - 1) * stride[1] + ker_w - img_w) / 2)
-    elif padding == "valid":
+    if padding == 'valid':
         ph, pw = 0, 0
-    img_h_out = int((img_h + 2 * ph - ker_h) / stride[0]) + 1
-    img_w_out = int((img_w + 2 * pw - ker_w) / stride[1]) + 1
 
-    pad = np.pad(A_prev, pad_width=((0, 0), (ph, ph,), (pw, pw), (0, 0)),
-                 mode="constant", constant_values=0)
+    if padding == 'same':
+        ph = int(np.ceil(max((h_prev - 1) * sh + kh - h_prev, 0) / 2))
+        pw = int(np.ceil(max((w_prev - 1) * sw + kw - w_prev, 0) / 2))
+        A_prev = np.pad(A_prev, pad_width=((0, 0), (ph, ph), (pw, pw), (0, 0)),
+                        mode='constant', constant_values=0)
+
     dW = np.zeros(W.shape)
-    dA = np.zeros(pad.shape)
-    # print(img_h, img_w)
-    # print(img_h_out, img_w_out)
-    # print(ker_h, ker_w)
-    # print(dZ.shape)
+    dA_prev = np.zeros(A_prev.shape)
+    db = np.zeros(b.shape)
+    db[:, :, 0, :] = np.sum(dZ, axis=(0, 1, 2))
 
-    for i in range(0, img_n):
-        for h in range(0, img_h_out):
-            for w in range(0, img_w_out):
-                for c in range(0, img_c_out):
-                    # print("loop")
-                    # print(i, h, w, c)
-                    dA_slice = dA[i, h * stride[0]: h * stride[0] + ker_h,
-                                  w * stride[1]: w * stride[1] + ker_w, :]
-                    Ap_s = pad[i, h * stride[0]: h * stride[0] + ker_h,
-                               w * stride[1]: w * stride[1] + ker_w, :]
-                    dA_slice += W[:, :, :, c] * dZ[i, h, w, c]
-                    dW[:, :, :, c] += Ap_s * dZ[i, h, w, c]
-    db = np.sum(dZ, axis=(0, 1, 2), keepdims=True)
-    return dA, dW, db
+    for i in range(m):
+        for j in range(h_dp):
+            for k in range(w_dp):
+                for cn in range(c_new):
+                    tmp_W = W[:, :, :, cn]
+                    tmp_dZ = dZ[i, j, k, cn]
+                    dA_prev[i, j * sh:j * sh + kh, k * sw:k * sw + kw] += \
+                        (tmp_W * tmp_dZ)
+                    dW[:, :, :, cn] += (A_prev[i, j * sh:j * sh + kh,
+                                               k * sw:k * sw + kw] * tmp_dZ)
+
+    _, h_dA, w_dA, _ = dA_prev.shape
+    dA_prev = dA_prev[:, ph:h_dA-ph, pw:w_dA-pw, :]
+    return dA_prev, dW, db
