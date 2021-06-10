@@ -25,7 +25,8 @@ def lenet5(x, y):
     All hidden layers requiring activation use the relu activation function
     Returns:
         a tensor for the softmax activated output
-        a training operation that utilizes Adam optimization (with default hyperparameters)
+        a training operation that utilizes Adam optimization (with default
+            hyperparameters)
         a tensor for the loss of the netowrk
         a tensor for the accuracy of the network
     """
