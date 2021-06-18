@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """ 0x08. Deep CNNs """
+
+
 import tensorflow.keras as K
 dense_block = __import__('5-dense_block').dense_block
 transition_layer = __import__('6-transition_layer').transition_layer
@@ -37,7 +39,5 @@ def densenet121(growth_rate=32, compression=1.0):
     out_l, filters = dense_block(out_l, filters, growth_rate, 16)
     out_l = K.layers.AvgPool2D((7, 7), padding='same')(out_l)
     out_l = K.layers.Dense(1000, activation='softmax')(out_l)
-
     model = K.Model(inputs, out_l)
-
     return model
