@@ -13,7 +13,7 @@ def inception_network():
     Use inception_block = __import__('0-inception_block').inception_block
     Returns: the keras model
     """
-    
+
     inputs = K.Input(shape=(224, 224, 3))
 
     out = K.layers.Conv2D(64, 7, 2, activation='relu', padding='same',
