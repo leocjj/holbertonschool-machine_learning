@@ -14,6 +14,9 @@ def densenet121(growth_rate=32, compression=1.0):
     growth_rate is the growth rate
     compression is the compression factor
     You can assume the input data will have shape (224, 224, 3)
+    All convolutions should be preceded by Batch Normalization and a rectified
+        linear activation (ReLU), respectively
+    All weights use he normal initialization
     """
     inputs = K.Input(shape=(224, 224, 3))
     out_l = K.layers.BatchNormalization(axis=3)(inputs)
