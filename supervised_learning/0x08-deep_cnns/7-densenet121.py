@@ -18,6 +18,8 @@ def densenet121(growth_rate=32, compression=1.0):
         linear activation (ReLU), respectively
     All weights use he normal initialization
     Use:
+        dense_block = __impor__('5-dense_block').dense_block
+        transition_layer = __impor__('6-transition_layer').transition_layer
     Returns: the keras model
     """
     inputs = K.Input(shape=(224, 224, 3))
