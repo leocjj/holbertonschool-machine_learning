@@ -21,13 +21,13 @@ def definiteness(matrix):
     You may import numpy as np
     """
 
-    if not isinstance(matrix, np.ndarray):
-        raise TypeError('matrix must be a numpy.ndarray')
-    if not matrix.any():
+    if type(matrix) is not np.ndarray:
+        raise TypeError("matrix must be a numpy.ndarray")
+    my_len = matrix.shape[0]
+    if len(matrix.shape) != 2 or my_len != matrix.shape[1]:
         return None
-    if matrix.shape[0] != matrix.shape[1]:
-        return None
-    if not np.array_equal(matrix, matrix.T):
+    transpose = np.transpose(matrix)
+    if not np.array_equal(transpose, matrix):
         return None
 
     eg, _ = np.linalg.eig(matrix)
