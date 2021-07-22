@@ -20,7 +20,7 @@ def definiteness(matrix):
     If matrix does not fit any of the above categories, return None
     """
 
-    if type(matrix) is not np.ndarray:
+    if not isinstance(matrix, np.ndarray):
         raise TypeError("matrix must be a numpy.ndarray")
     my_len = matrix.shape[0]
     if len(matrix.shape) != 2 or my_len != matrix.shape[1]:
