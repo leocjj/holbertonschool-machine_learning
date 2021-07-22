@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+""" 0x05-advanced_linear_algebra """
+
+
+def determinant(matrix):
+    """
+    calculates the determinant of a matrix:
+    matrix is a list of lists whose determinant should be calculated
+    If matrix is not a list of lists, raise a TypeError with the message
+        matrix must be a list of lists
+    If matrix is not square, raise a ValueError with the message matrix must
+        be a square matrix
+    The list [[]] represents a 0x0 matrix
+    Returns: the determinant of matrix
+    """
+
+    if not matrix or not isinstance(matrix, list):
+        raise TypeError("matrix must be a list of lists")
+    for element in matrix:
+        if not isinstance(element, list):
+            raise TypeError("matrix must be a list of lists")
+    if len(matrix) == 1:
+        if len(matrix[0]) == 1:
+            return matrix[0][0]
+        elif matrix == [[]]:
+            return 1
+    if not matrix[0] or len(matrix) != len(matrix[0]):
+        raise ValueError("matrix must be a square matrix")
+
+    t = 0
+    for index, _ in enumerate(matrix):
+        min = [[vector for row, vector in enumerate(line) if row != index]
+               for line in matrix[1:]]
+        t += (-1) ** index * matrix[0][index] * determinant(min)
+    return t
+
+
+def minor(matrix):
+    """
+    calculates the minor matrix of a matrix:
+
+    matrix is a list of lists whose minor matrix should be calculated
+    If matrix is not a list of lists, raise a TypeError with the message
+        matrix must be a list of lists
+    If matrix is not square or is empty, raise a ValueError with the message
+        matrix must be a non-empty square matrix
+    Returns: the minor matrix of matrix
+    """
+
+    if not matrix or not isinstance(matrix, list):
+        raise TypeError("matrix must be a list of lists")
+    for element in matrix:
+        if not isinstance(element, list):
+            raise TypeError("matrix must be a list of lists")
+    if matrix == [[]]:
+        raise ValueError("matrix must be a non-empty square matrix")
+    for row in matrix:
+        if len(row) != len(matrix):
+            raise ValueError("matrix must be a non-empty square matrix")
+
+    if len(matrix) == 1:
+        return [[1]]
+
+    min = []
+    for i, _ in enumerate(matrix):
+        min.append([])
+        for j, _ in enumerate(matrix):
+            rows = [matrix[m] for m, _ in enumerate(matrix) if m != i]
+            new_m = [[row[n] for n, _ in enumerate(matrix) if n != j]
+                     for row in rows]
+            my_det = determinant(new_m)
+            min[i].append(my_det)
+
+    return min
