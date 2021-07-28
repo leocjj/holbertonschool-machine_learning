@@ -40,8 +40,8 @@ class MultiNormal():
         if not isinstance(x, np.ndarray):
             raise TypeError("x must be a numpy.ndarray")
         d = self.mean.shape[0]
-        if len(x.shape) != 2 or x.shape != (x.shape[0], 1):
-            raise ValueError("x must have the shape ({}, 1)".format(d))
+        if x.shape[0] != d or x.shape[1] != 1:
+            raise ValueError('x must have the shape ({}, 1)'.format(d))
 
         res = np.exp(np.matmul(np.matmul((x - self.mean).T,
                                          np.linalg.inv(self.cov)),
