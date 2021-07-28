@@ -1,8 +1,9 @@
-
 #!/usr/bin/env python3
 """
 that represents a Multivariate Normal distribution
 """
+
+
 import numpy as np
 
 
