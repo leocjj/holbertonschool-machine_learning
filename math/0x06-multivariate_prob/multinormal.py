@@ -1,53 +1,55 @@
 #!/usr/bin/env python3
-"""
-that represents a Multivariate Normal distribution
-"""
+"""Init of MultiNormal class"""
 import numpy as np
 
 
-class MultiNormal:
-    """Multinormal Class"""
-
+class MultiNormal():
+    """MultiNormal class"""
     def __init__(self, data):
-        """
-        data is a numpy.ndarray of shape (d, n) containing the data set:
-        n is the number of data points
-        d is the number of dimensions in each data point
-        If data is not a 2D numpy.ndarray, raise a TypeError with the message
-        data must be a 2D numpy.ndarray
-        If n is less than 2, raise a ValueError with the message data must
-        contain multiple data points
-        """
-        if type(data) is not np.ndarray or len(data.shape) != 2:
+        """inits self and data"""
+        if not isinstance(data, np.ndarray):
             raise TypeError("data must be a 2D numpy.ndarray")
-
+        if len(data.shape) != 2:
+            raise TypeError("data must be a 2D numpy.ndarray")
         if data.shape[1] < 2:
             raise ValueError("data must contain multiple data points")
 
-        mean = np.mean(data, axis=1).reshape((data.shape[0], 1))
-        self.mean = mean
-        self.cov = np.matmul(data - self.mean, data.T) / (data.shape[1] - 1)
+        def mean_cov(X):
+            """Mean and covariance.
+            Looked at how np does cov and found it to be fastest"""
+            if not isinstance(X, np.ndarray):
+                raise TypeError("X must be a 2D numpy.ndarray")
+            if len(X.shape) != 2:
+                raise TypeError("X must be a 2D numpy.ndarray")
+            if X.shape[1] < 2:
+                raise ValueError("X must contain multiple data points")
+
+            X = X.T
+            mean = np.mean(X, axis=0, keepdims=1)
+            N = X.shape[0]
+            X -= mean[0]
+            X_T = X
+            c = np.matmul(X.T, X_T) / N
+
+            # print(mean, "\n", c.squeeze())
+
+            return mean, c.squeeze()
+
+        self.mean, self.cov = mean_cov(data)
 
     def pdf(self, x):
-        """
-        x is a numpy.ndarray of shape (d, 1) containing the data point whose
-        PDF should be calculated
-        d is the number of dimensions of the Multinomial instance
-        If x is not a numpy.ndarray, raise a TypeError with the message x must
-        be a numpy.ndarray
-        If x is not of shape (d, 1), raise a ValueError with the message x
-        must have the shape ({d}, 1)
-        """
-        if type(x) is not np.ndarray:
+        """finds the pdf of a multivariate normal distribution"""
+        if not isinstance(x, np.ndarray):
             raise TypeError("x must be a numpy.ndarray")
+        d = x.shape[0]
+        if len(x.shape) != 2 or x.shape != (d, 1):
+            raise ValueError("x must have the shape ({d}, 1)".format(d))
 
-        d = self.mean.shape[0]
-        if x.shape[0] != d or x.shape[1] != 1:
-            str = 'x must have the shape ({}, 1)'.format(d)
-            raise ValueError(str)
+        mean = self.mean[0]
+        cov = self.cov
+        # print(mean, "\n", cov, "\n")
 
-        res = np.matmul((x - self.mean).T, np.linalg.inv(self.cov))
-        res = np.exp(np.matmul(res, (x - self.mean)) / -2)
-        res /= np.sqrt(pow(2 * np.pi, x.shape[0]) * np.linalg.det(self.cov))
-
-        return res[0][0]
+        pdf = (1 / np.sqrt(((2 * np.pi) ** d) * np.linalg.det(cov)) *
+               np.exp(-1/2 * (x - mean).T * np.linalg.inv(cov) * (x - mean)))
+        pdf = np.sum(pdf) / d
+        return pdf
