@@ -43,12 +43,8 @@ class MultiNormal():
         if x.shape[0] != d or x.shape[1] != 1:
             raise ValueError('x must have the shape ({}, 1)'.format(d))
 
-        res = np.exp(np.matmul(np.matmul((x - self.mean).T,
-                                         np.linalg.inv(self.cov)),
-                               (x - self.mean)
-                               ) / -2)\
-            / np.sqrt(pow(2 * np.pi, x.shape[0])
-                      * np.linalg.det(self.cov)
-                      )
+        res = np.matmul((x - self.mean).T, np.linalg.inv(self.cov))
+        res = np.exp(np.matmul(res, (x - self.mean)) / -2)
+        res /= np.sqrt(pow(2 * np.pi, x.shape[0]) * np.linalg.det(self.cov))
 
         return res[0][0]
