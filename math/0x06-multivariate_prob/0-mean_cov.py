@@ -1,4 +1,4 @@
-# !/usr/bin/env python3
+#!/usr/bin/env python3
 """ 0x06. Multivariate Probability """
 import numpy as np
 
