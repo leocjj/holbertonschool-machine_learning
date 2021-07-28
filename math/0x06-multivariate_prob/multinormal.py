@@ -23,8 +23,8 @@ class MultiNormal:
             raise ValueError('data must contain multiple data points')
         d, n = data.shape
         self.mean = data.mean(axis=1, keepdims=True)
-        self.dev = data - self.mean
-        self.cov = np.matmul(self.dev, self.dev.T) / (n - 1)
+        dev = data - self.mean
+        self.cov = np.matmul(dev, dev.T) / (n - 1)
 
     def pdf(self, x):
         """
@@ -39,7 +39,7 @@ class MultiNormal:
         """
         if not isinstance(x, np.ndarray):
             raise TypeError("x must be a numpy.ndarray")
-        d = self.mean.shape[0]
+        d = self.cov.shape[0]
         if len(x.shape) != 2 or x.shape != (d, 1):
             raise ValueError("x must have the shape ({}, 1)".format(d))
 
@@ -52,3 +52,33 @@ class MultiNormal:
                       )
 
         return res[0][0]
+
+
+
+        self.mean = np.mean(data, axis=1).reshape(d, 1)
+
+
+        d = self.cov.shape[0]
+
+        if len(x.shape) != 2:
+            raise ValueError('x must have the shape ({}, 1)'.format(d))
+
+        if x.shape[1] != 1 or x.shape[0] != d:
+            raise ValueError('x must have the shape ({}, 1)'.format(d))
+
+        n = x.shape[0]
+
+        mean = self.mean
+        cov = self.cov
+        cov_det = np.linalg.det(cov)
+        cov_inv = np.linalg.inv(cov)
+
+        # denominator
+        den = np.sqrt(((2 * np.pi) ** n) * cov_det)
+
+        # exponential term
+        expo = -0.5 * np.matmul(np.matmul((x - mean).T, cov_inv), x - mean)
+
+        PDF = (1 / den) * np.exp(expo[0][0])
+
+        return PDF
