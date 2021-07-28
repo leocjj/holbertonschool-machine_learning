@@ -38,7 +38,7 @@ class MultiNormal():
         Returns the value of the PDF
         """
         if not isinstance(x, np.ndarray):
-            raise TypeError("C must be a numpy.ndarray")
+            raise TypeError("x must be a numpy.ndarray")
         d = self.mean.shape[0]
         if len(x.shape) != 2 or x.shape != (d, 1):
             raise ValueError("x must have the shape ({}, 1)".format(d))
