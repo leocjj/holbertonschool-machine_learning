@@ -31,26 +31,23 @@ class MultiNormal:
     def pdf(self, x):
         """
         x is a numpy.ndarray of shape (d, 1) containing the data point whose
-            PDF should be calculated
+        PDF should be calculated
         d is the number of dimensions of the Multinomial instance
         If x is not a numpy.ndarray, raise a TypeError with the message x must
-            be a numpy.ndarray
-        If x is not of shape (d, 1), raise a ValueError with the message x must
-            have the shape ({d}, 1)
-        Returns the value of the PDF
+        be a numpy.ndarray
+        If x is not of shape (d, 1), raise a ValueError with the message x
+        must have the shape ({d}, 1)
         """
-        if not isinstance(x, np.ndarray):
+        if type(x) is not np.ndarray:
             raise TypeError("x must be a numpy.ndarray")
-        d = self.mean.shape[0]
-        if len(x.shape) != 2 or x.shape != (d, 1):
-            raise ValueError("x must have the shape ({}, 1)".format(d))
 
-        res = np.exp(np.matmul(np.matmul((x - self.mean).T,
-                                         np.linalg.inv(self.cov)),
-                               (x - self.mean)
-                               ) / -2)\
-            / np.sqrt(pow(2 * np.pi, x.shape[0])
-                      * np.linalg.det(self.cov)
-                      )
+        d = self.mean.shape[0]
+        if x.shape[0] != d or x.shape[1] != 1:
+            str = 'x must have the shape ({}, 1)'.format(d)
+            raise ValueError(str)
+
+        res = np.matmul((x - self.mean).T, np.linalg.inv(self.cov))
+        res = np.exp(np.matmul(res, (x - self.mean)) / -2)
+        res /= np.sqrt(pow(2 * np.pi, x.shape[0]) * np.linalg.det(self.cov))
 
         return res[0][0]
