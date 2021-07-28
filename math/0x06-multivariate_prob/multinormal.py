@@ -52,33 +52,3 @@ class MultiNormal:
                       )
 
         return res[0][0]
-
-
-
-        self.mean = np.mean(data, axis=1).reshape(d, 1)
-
-
-        d = self.cov.shape[0]
-
-        if len(x.shape) != 2:
-            raise ValueError('x must have the shape ({}, 1)'.format(d))
-
-        if x.shape[1] != 1 or x.shape[0] != d:
-            raise ValueError('x must have the shape ({}, 1)'.format(d))
-
-        n = x.shape[0]
-
-        mean = self.mean
-        cov = self.cov
-        cov_det = np.linalg.det(cov)
-        cov_inv = np.linalg.inv(cov)
-
-        # denominator
-        den = np.sqrt(((2 * np.pi) ** n) * cov_det)
-
-        # exponential term
-        expo = -0.5 * np.matmul(np.matmul((x - mean).T, cov_inv), x - mean)
-
-        PDF = (1 / den) * np.exp(expo[0][0])
-
-        return PDF
