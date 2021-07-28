@@ -3,7 +3,7 @@
 import numpy as np
 
 
-class MultiNormal():
+class MultiNormal:
     """
     represents a Multivariate Normal distribution:
     Set the public instance variables:
