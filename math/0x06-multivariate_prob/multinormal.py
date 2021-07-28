@@ -43,7 +43,7 @@ class MultiNormal():
             raise TypeError("x must be a numpy.ndarray")
         d = x.shape[0]
         if len(x.shape) != 2 or x.shape != (d, 1):
-            raise ValueError("x must have the shape ({d}, 1)".format(d))
+            raise ValueError("x must have the shape ({}, 1)".format(d))
 
         mean = self.mean[0]
         cov = self.cov
