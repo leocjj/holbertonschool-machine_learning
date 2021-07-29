@@ -1,19 +1,25 @@
 #!/usr/bin/env python3
-"""PCA of an array to reduce the number of features"""
+"""
+that performs PCA on a dataset
+"""
 import numpy as np
 
 
 def pca(X, var=0.95):
-    """performs pca on a matrix"""
-    W, V = np.linalg.eig(np.matmul(X.T, X))
-    W_idx = W.argsort()[::-1]
-    V = V[:, W_idx]
-    # print(V)
-    V_var = np.copy(V)
-    V_var *= 1 / np.abs(V_var).max()
-    # print(V_var)
-    V_idx = V[np.where(np.abs(V_var) >= var, True, False)]
-    # print(V_idx.shape)
-    V_idx = len(V_idx)
-    # print(V[:, :V_idx].shape)
-    return V[:, :V_idx] * -1.
+    """
+    X is a numpy.ndarray of shape (n, d) where:
+    n is the number of data points
+    d is the number of dimensions in each point
+    all dimensions have a mean of 0 across all data points
+    var is the fraction of the variance that the PCA transformation should
+    maintain
+    Returns: the weights matrix, W, that maintains var fraction of X‘s
+    original variance
+    W is a numpy.ndarray of shape (d, nd) where nd is the new dimensionality
+    of the transformed X
+    """
+    u, s, vh = np.linalg.svd(X)
+    variance = np.cumsum(s) / np.sum(s)
+    r = np.argwhere(variance >= var)[0, 0]
+
+    return vh[:r + 1].T
