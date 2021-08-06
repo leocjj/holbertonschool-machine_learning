@@ -34,6 +34,7 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
     prior_bic = 0
     likelyhoods = bics = []
     best_k = kmax
+    pi_prev = m_prev = S_prev = best_res = None
     for k in range(kmin, kmax + 1):
         pi, m, S, g, ll = expectation_maximization(X, k, iterations, tol,
                                                    verbose)
