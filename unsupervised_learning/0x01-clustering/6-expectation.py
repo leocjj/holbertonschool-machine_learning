@@ -37,7 +37,7 @@ def expectation(X, pi, m, S):
     for i in range(k):
         P = pdf(X, m[i], S[i])
         g[i] = pi[i] * P
-    l = np.sum(np.log(g.sum(axis=0)))
+    likelyhood = np.sum(np.log(g.sum(axis=0)))
     g = g / g.sum(axis=0)
 
-    return g, l
+    return g, likelyhood
