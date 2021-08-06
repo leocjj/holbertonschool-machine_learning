@@ -17,6 +17,7 @@ def pdf(X, m, S):
         data point
     All values in P should have a minimum value of 1e-300
     """
+
     if not isinstance(X, np.ndarray) or len(X.shape) != 2:
         return None
 
@@ -28,10 +29,10 @@ def pdf(X, m, S):
         return None
 
     d = m.shape[0]
-    x_m = X - m
+    xm = X - m
 
     inv = np.linalg.inv(S)
-    fac = np.einsum('...k,kl,...l->...', x_m, inv, x_m)
+    fac = np.einsum('...k,kl,...l->...', xm, inv, xm)
     P1 = 1. / (np.sqrt(((2 * np.pi) ** d * np.linalg.det(S))))
     P2 = np.exp(-fac / 2)
     P = np.maximum((P1 * P2), 1e-300)
