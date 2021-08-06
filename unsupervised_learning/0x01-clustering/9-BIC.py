@@ -30,21 +30,18 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
     if kmax is None:
         kmax = iterations
 
-    n = X.shape[0]
-    prior_bic = 0
-    likelyhoods = bics = []
-    best_k = kmax
-    pi_prev = m_prev = S_prev = best_res = None
+    n, d = X.shape
+    ki = li = bi = tup = []
     for k in range(kmin, kmax + 1):
         pi, m, S, g, ll = expectation_maximization(X, k, iterations, tol,
                                                    verbose)
-        bic = k * np.log(n) - 2 * ll
-        if np.isclose(bic, prior_bic) and best_k >= k:
-            best_k = k - 1
-            best_res = pi_prev, m_prev, S_prev
-        pi_prev, m_prev, S_prev = pi, m, S
-        likelyhoods.append(ll)
-        bics.append(bic)
-        prior_bic = bic
-
-    return best_k, best_res, np.asarray(likelyhoods), np.asarray(bics)
+        p = (d * k) + (k * d * (d + 1) / 2) + k - 1
+        li.append(ll)
+        ki.append(k)
+        tup.append((pi, m, S))
+        BIC = p * np.log(n) - 2 * ll
+        bi.append(BIC)
+    ll = np.array(li)
+    b = np.array(bi)
+    top = np.argmin(b)
+    return (ki[top], tup[top], ll, b)
