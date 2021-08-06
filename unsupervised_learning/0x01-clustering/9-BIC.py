@@ -31,10 +31,13 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
         kmax = iterations
 
     n, d = X.shape
-    ki = li = bi = tup = []
+    ki = []
+    li = []
+    bi = []
+    tup = []
     for k in range(kmin, kmax + 1):
-        pi, m, S, g, ll = expectation_maximization(X, k, iterations, tol,
-                                                   verbose)
+        pi, m, S, g, ll = expectation_maximization(X, k, iterations,
+                                                   tol, verbose)
         p = (d * k) + (k * d * (d + 1) / 2) + k - 1
         li.append(ll)
         ki.append(k)
