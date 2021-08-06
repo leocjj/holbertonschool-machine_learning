@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """ 0x01. Clustering """
 import numpy as np
-pdf = __import__('5-pdf').pdf
 
 
 def maximization(X, g):
