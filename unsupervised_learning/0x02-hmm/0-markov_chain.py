@@ -4,7 +4,10 @@ import numpy as np
 
 
 def markov_chain(P, s, t=1):
-    """ determines the steady state probabilities of a regular markov chain """
+    """
+    determines the probability of a markov chain being in a particular
+    state after a specified number of iterations
+    """
     for _ in range(t):
         s = s @ P
     return s
