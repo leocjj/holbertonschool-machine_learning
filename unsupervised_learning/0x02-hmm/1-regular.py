@@ -7,17 +7,12 @@ def regular(P):
     """
     determines the steady state probabilities of a regular markov chain
     """
-    try:
-        dim = P.shape[0]
-        q = (P - np.eye(dim))
-        ones = np.ones(dim)
-        q = np.c_[q, ones]
-        QTQ = np.dot(q, q.T)
-        bQT = np.ones(dim)
-        answer = np.linalg.solve(QTQ, bQT)
-        if np.all(answer > 0):
-            return answer
-        else:
-            return None
-    except Exception as e:
+    if len(P.shape) != 2 or P.shape[0] != P.shape[1] or P.shape[0] < 1:
         return None
+
+    P = np.linalg.matrix_power(P, 100)
+    if np.any(P <= 0):
+        return None
+    ss_prob = np.array([P[0]])
+
+    return ss_prob
