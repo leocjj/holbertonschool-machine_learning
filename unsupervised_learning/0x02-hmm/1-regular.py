@@ -4,7 +4,9 @@ import numpy as np
 
 
 def regular(P):
-    """ determines if a markov chain is absorbing """
+    """
+    determines the steady state probabilities of a regular markov chain
+    """
     try:
         dim = P.shape[0]
         q = (P - np.eye(dim))
