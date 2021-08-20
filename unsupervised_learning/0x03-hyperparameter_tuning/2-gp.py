@@ -41,7 +41,8 @@ class GaussianProcess:
         return mu_s.flatten(), np.diag(sigma)
 
     def update(self, X_new, Y_new):
-        """ updates a Gaussian Process """
+        """ updates a Gaussian Process
+        ."""
         self.X = np.vstack((self.X, X_new[np.newaxis]))
         self.Y = np.vstack((self.Y, Y_new[np.newaxis]))
         self.K = self.kernel(self.X, self.X)
