@@ -5,7 +5,7 @@
 import numpy as np
 
 
-class GaussianProcess():
+class GaussianProcess:
     """
     class that represents a noiseless 1D Gaussian process
     """
