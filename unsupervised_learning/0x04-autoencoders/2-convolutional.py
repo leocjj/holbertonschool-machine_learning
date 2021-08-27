@@ -81,8 +81,8 @@ def autoencoder(input_dims, filters, latent_dims):
     loss = "binary_crossentropy"
     opt = keras.optimizers.Adam()
 
-    #encoder.compile(loss=loss, optimizer=opt)
-    #decoder.compile(loss=loss, optimizer=opt)
+    encoder.compile(loss=loss, optimizer=opt)
+    decoder.compile(loss=loss, optimizer=opt)
     auto.compile(loss=loss, optimizer=opt)
 
     return encoder, decoder, auto
