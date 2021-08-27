@@ -52,20 +52,20 @@ def autoencoder(input_dims, filters, latent_dims):
 
     for fil in reversed(filters):
         dec = keras.layers.Conv2D(fil,
-                                  kernel_size=(3, 3),
+                                  kernel_size=3,
                                   padding="same",
                                   activation="relu"
                                   )(dec)
-        dec = keras.layers.UpSampling2D((2, 2))(dec)
+        dec = keras.layers.UpSampling2D(2)(dec)
 
     second_to_last = keras.layers.Conv2D(last_filter,
-                                         kernel_size=(3, 3),
+                                         kernel_size=3,
                                          padding="valid",
                                          activation="relu"
                                          )(dec)
-    second_to_last = keras.layers.UpSampling2D((2, 2))(second_to_last)
+    second_to_last = keras.layers.UpSampling2D(2)(second_to_last)
     outputs = keras.layers.Conv2D(input_dims[-1],
-                                  kernel_size=(3, 3),
+                                  kernel_size=3,
                                   padding="same",
                                   activation="sigmoid"
                                   )(second_to_last)
@@ -84,9 +84,5 @@ def autoencoder(input_dims, filters, latent_dims):
     encoder.compile(loss=loss, optimizer=opt)
     decoder.compile(loss=loss, optimizer=opt)
     auto.compile(loss=loss, optimizer=opt)
-
-    encoder.summary()
-    decoder.summary()
-    auto.summary()
 
     return encoder, decoder, auto
