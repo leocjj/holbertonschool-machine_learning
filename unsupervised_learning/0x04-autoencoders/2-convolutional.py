@@ -34,11 +34,11 @@ def autoencoder(input_dims, filters, latent_dims):
 
     for fil in filters:
         enc = keras.layers.Conv2D(fil,
-                                  kernel_size=(3, 3),
+                                  kernel_size=3,
                                   padding="same",
                                   activation="relu"
                                   )(enc)
-        enc = keras.layers.MaxPooling2D(pool_size=(2, 2),
+        enc = keras.layers.MaxPooling2D(pool_size=2,
                                         padding="same"
                                         )(enc)
 
