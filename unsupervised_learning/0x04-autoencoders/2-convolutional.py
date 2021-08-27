@@ -29,7 +29,7 @@ def autoencoder(input_dims, filters, latent_dims):
     The autoencoder model should be compiled using adam optimization and binary
         cross-entropy loss
     """
-    inputs = keras.Input((input_dims))
+    inputs = keras.Input(shape=input_dims)
     enc = inputs
 
     for fil in filters:
