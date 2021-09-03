@@ -29,4 +29,3 @@ class BidirectionalCell:
         h_next = np.tanh(concat @ self.Whf + self.bhf)
 
         return h_next
-    
