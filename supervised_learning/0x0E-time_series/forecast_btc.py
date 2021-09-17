@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-'''forecast btc '''
+""" Forecasting """
 import tensorflow as tf
 import tensorflow.keras as K
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import MinMaxScaler
 
 preprocess = __import__('preprocess_data').pre_process
-
 x_train, y_train, x_test, y_test, sc = preprocess()
 
 model = K.models.Sequential()
