@@ -10,22 +10,20 @@ preprocess = __import__('preprocess_data').pre_process
 x_train, y_train, x_test, y_test, sc = preprocess()
 
 model = K.models.Sequential()
-# Adding the first LSTM layer and some Dropout regularisation
+
+# Four LSTM layers with dropout
 model.add(K.layers.LSTM(units=50, return_sequences=True,
                         input_shape=(x_train.shape[1], 1)))
 model.add(K.layers.Dropout(0.2))
-# Adding a second LSTM layer and some Dropout regularisation
 model.add(K.layers.LSTM(units=50, return_sequences=True))
 model.add(K.layers.Dropout(0.2))
-# Adding a third LSTM layer and some Dropout regularisation
 model.add(K.layers.LSTM(units=50, return_sequences=True))
 model.add(K.layers.Dropout(0.2))
-# Adding a fourth LSTM layer and some Dropout regularisation
 model.add(K.layers.LSTM(units=50))
 model.add(K.layers.Dropout(0.2))
-# Adding the output layer
+
 model.add(K.layers.Dense(units=1))
-# Compiling the RNN
+
 model.compile(optimizer='adam', loss='mean_squared_error')
 
 train_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train))
@@ -37,7 +35,7 @@ test_dataset = test_dataset.batch(32)
 model.fit(train_dataset, epochs=10, steps_per_epoch=10)
 model.evaluate(test_dataset, steps=10)
 
-predicted_price = model.predict(test_dataset, steps=500)
+predicted_price = model.predict(test_dataset, steps=470)
 predicted_btc = sc.inverse_transform(predicted_price)
 y = sc.inverse_transform(y_test)
 
