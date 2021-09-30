@@ -14,13 +14,10 @@ class Encoder(tf.keras.layers.Layer):
                  drop_rate=0.1):
         """ Contructor method """
         super().__init__()
-
         self.dm = dm
         self.N = N
-
         self.embedding = tf.keras.layers.Embedding(input_vocab, dm)
         self.positional_encoding = positional_encoding(max_seq_len, dm)
-
         self.blocks = [EncoderBlock(dm, h, hidden, drop_rate)
                        for _ in range(N)]
         self.dropout = tf.keras.layers.Dropout(drop_rate)
