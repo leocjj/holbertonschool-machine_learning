@@ -7,9 +7,18 @@ import tensorflow_datasets as tfds
 
 
 class Dataset:
-    """ Class """
+    """ Class that loads and preps a dataset for machine translation """
+
     def __init__(self):
-        """ Constructor """
+        """
+        Creates the instance attributes:
+        data_train, which contains the ted_hrlr_translate/pt_to_en
+            tf.data.Dataset train split, loaded as_supervided
+        data_valid, which contains the ted_hrlr_translate/pt_to_en
+            tf.data.Dataset validate split, loaded as_supervided
+        tokenizer_pt is the Portuguese tokenizer created from the training set
+        tokenizer_en is the English tokenizer created from the training set
+        """
         self.data_train = tfds.load('ted_hrlr_translate/pt_to_en',
                                     split='train', as_supervised=True)
         self.data_valid = tfds.load('ted_hrlr_translate/pt_to_en',
