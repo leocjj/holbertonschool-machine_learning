@@ -12,8 +12,9 @@ class Encoder(tf.keras.layers.Layer):
 
     def __init__(self, N, dm, h, hidden, input_vocab, max_seq_len,
                  drop_rate=0.1):
-        """ Contructor method """
+        """ Constructor method """
         super().__init__()
+
         self.dm = dm
         self.N = N
         self.embedding = tf.keras.layers.Embedding(input_vocab, dm)
