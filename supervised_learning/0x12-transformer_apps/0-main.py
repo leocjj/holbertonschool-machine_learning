@@ -1,18 +1,14 @@
 #!/usr/bin/env python3
 
-import numpy as np
+Dataset = __import__('0-dataset').Dataset
 import tensorflow as tf
-RNNEncoder = __import__('0-rnn_encoder').RNNEncoder
 
-encoder = RNNEncoder(1024, 128, 256, 32)
-print(encoder.batch)
-print(encoder.units)
-print(type(encoder.embedding))
-print(type(encoder.gru))
-
-initial = encoder.initialize_hidden_state()
-print(initial)
-x = tf.convert_to_tensor(np.random.choice(1024, 320).reshape((32, 10)))
-outputs, hidden = encoder(x, initial)
-print(outputs)
-print(hidden)
+data = Dataset()
+for pt, en in data.data_train.take(1):
+    print(pt.numpy().decode('utf-8'))
+    print(en.numpy().decode('utf-8'))
+for pt, en in data.data_valid.take(1):
+    print(pt.numpy().decode('utf-8'))
+    print(en.numpy().decode('utf-8'))
+print(type(data.tokenizer_pt))
+print(type(data.tokenizer_en))
