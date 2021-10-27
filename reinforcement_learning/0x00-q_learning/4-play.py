@@ -7,7 +7,17 @@ import gym
 
 
 def load_frozen_lake(desc=None, map_name=None, is_slippery=False):
-    """Loads the frozen lake"""
+    """
+    Loads the pre-made FrozenLakeEnv evnironment from OpenAI’s gym:
+    desc: is either None or a list of lists containing a custom description of
+    the map to load for the environment
+    map_name: is either None or a string containing the pre-made map to load
+    Note: If both desc and map_name are None, the environment will load a
+    randomly generated 8x8 map
+    is_slippery is a boolean to determine if the ice is slippery
+    Returns: the environment
+    """
+
     env = gym.make("FrozenLake-v0", desc=desc,
                    map_name=map_name,
                    is_slippery=is_slippery)
@@ -15,10 +25,24 @@ def load_frozen_lake(desc=None, map_name=None, is_slippery=False):
 
 
 def epsilon_greedy(Q, state, epsilon):
-    """always exploit q table"""
+    """
+    Uses epsilon-greedy to determine the next action:
+    Q is a numpy.ndarray containing the q-table
+    state is the current state
+    epsilon is the epsilon to use for the calculation
+    You should sample p with numpy.random.uniformn to determine if your
+        algorithm should explore or exploit
+    If exploring, you should pick the next action with numpy.random.randint
+        from all possible actions
+    Returns: the next action index
+    """
     env = load_frozen_lake()
-    # print(env)
-    action = np.argmax(Q[state, :])
+
+    if np.random.uniform(0, 1) < epsilon:
+        action = env.action_space.sample()
+    else:
+        action = np.argmax(Q[state, :])
+
     return action
 
 
