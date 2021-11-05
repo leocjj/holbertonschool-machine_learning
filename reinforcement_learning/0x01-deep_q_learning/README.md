@@ -14,6 +14,4 @@
 
 ## [LeoCJJ](https://github.com/leocjj)
 
-[Web Page](http://leocjj.tech)
-
 2021
