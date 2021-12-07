@@ -1,0 +1,5 @@
+-- create table with fields
+CREATE TABLE IF NOT EXISTS `first_table` (
+  `id` INT(11) DEFAULT NULL,
+  `name` VARCHAR(256) DEFAULT NULL
+) ENGINE=MYISAM DEFAULT CHARSET=LATIN1;
