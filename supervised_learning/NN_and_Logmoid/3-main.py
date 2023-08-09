@@ -19,14 +19,14 @@ X_dev = X_dev_3D.reshape((X_dev_3D.shape[0], -1)).T
 np.random.seed(0)
 
 # NETWORK INSTANCE
-network_layers = [5, 3, 1]                          # hidden and output layer.
+network_layers = [5, 3, 1]           # hidden and output layers.
 activation_function = ACTIVATION_FUNCTIONS[2]
 deep = Deep(X_train.shape[0], network_layers, activation=activation_function)
 
 # NETWORK TRAINING
 print("\n***************************** TRAINING ***************************\n")
 time1 = time.time()
-A, cost = deep.train(X_train, Y_train, alpha=0.1, iterations=10, step=10)
+A, cost = deep.train(X_train, Y_train, alpha=0.1, iterations=5, step=1)
 time2 = time.time()
 
 # TRAINING DATA REPORT
