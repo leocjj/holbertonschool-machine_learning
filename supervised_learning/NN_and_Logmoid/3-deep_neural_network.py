@@ -2,11 +2,12 @@
 """ 0x01. Classification """
 import numpy as np
 import matplotlib.pyplot as plt
-from math import exp, log
+from math import exp
 from pickle import dump, load
 from os.path import isfile
-#from numba import njit
+# from numba import njit
 import logging
+#from logmoid import logmoid, logmoid_inv
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 SIGMOID = 'sigmoid'
@@ -14,8 +15,9 @@ TANH = 'tanh'
 LOGMOID = 'logmoid'
 ACTIVATION_FUNCTIONS = (SIGMOID, TANH, LOGMOID)
 
-#@njit(fastmath=True, parallel=True, nogil=True)
-#@njit(fastmath=True)
+
+# @njit(fastmath=True, parallel=True, nogil=True)
+# @njit(fastmath=True)
 def sigmoid(x):
     """
     https://stackoverflow.com/questions/3985619/
@@ -27,10 +29,11 @@ def sigmoid(x):
     if isinstance(x, int):
         return exp(-np.logaddexp(0., -x))
     else:
-        return np.exp(-np.logaddexp(0., -1 * x))
+        return np.exp(-np.logaddexp(0., -1. * x))
 
-#@njit(fastmath=True, parallel=True, nogil=True)
-#@njit(fastmath=True)
+
+# @njit(fastmath=True, parallel=True, nogil=True)
+# @njit(fastmath=True)
 def tanh(x):
     """
     :param x: int or array. Use math.ext instead of np.exp for integers.
@@ -43,27 +46,37 @@ def tanh(x):
     else:
         return np.tanh(x)
 
-#@njit(fastmath=True, parallel=True, nogil=True)
-#@njit(fastmath=True)
-def logmoid(z):
+
+# @njit(fastmath=True, parallel=True, nogil=True)
+# @njit(fastmath=True)
+def logmoid2(z):
     """
     Piecewise-defined function using ln(x+1) for x equals or greater than zero
     and -ln(-x+1) for x less than zero.
     :param z: int or array. Use math.log instead of np.log for integers.
     :return: logmoid function of x
     """
-    return np.where(z < 0, -np.log(1 - z), np.log(1 + z))
+    # TODO: CREATE THIS FUNCTIONS AS A MODULE WITH cython
+    return np.piecewise(z,
+                        [z < 0., z >= 0.],
+                        [lambda x: -np.log(1. - x), lambda x: np.log(1. + x)]
+                        )
 
-#@njit(fastmath=True, parallel=True, nogil=True)
-#@njit(fastmath=True)
-def logmoid_inv(A):
+
+# @njit(fastmath=True, parallel=True, nogil=True)
+# @njit(fastmath=True)
+def logmoid_inv2(A):
     """
     Piecewise-defined function to calculate the inverse of logmoid.
     i.e.: the output of the neuron before the activation function.
     :param A: int or array. Use math.log instead of np.log for integers.
     :return: inverse logmoid function of A
     """
-    return np.where(A < 0, 1 - np.exp(-A), -1 + np.exp(A))
+    # TODO: CREATE THIS FUNCTIONS AS A MODULE WITH cython
+    return np.piecewise(A,
+                        [A < 0., A >= 0.],
+                        [lambda x: 1. - np.exp(-x), lambda x: -1. + np.exp(x)]
+                        )
 
 
 class DeepNeuralNetwork:
@@ -83,7 +96,7 @@ class DeepNeuralNetwork:
             raise ValueError('nx must be a positive integer')
         if not isinstance(layers, list) or not list:
             raise TypeError('layers must be a list of positive integers')
-        if not np.issubdtype(np.array(layers).dtype, np.integer) or\
+        if not np.issubdtype(np.array(layers).dtype, np.integer) or \
                 not all(np.array(layers) >= 1):
             raise TypeError('layers must be a list of positive integers')
         if activation not in ACTIVATION_FUNCTIONS:
@@ -93,14 +106,14 @@ class DeepNeuralNetwork:
         self.__L = len(layers)
         self.__cache = {}
         self.__weights = {'W1':
-                          np.random.randn(layers[0], nx) * np.sqrt(2 / nx),
+                              np.random.randn(layers[0], nx) * np.sqrt(2 / nx),
                           'b1': np.zeros((layers[0], 1))
                           }
         self.__activation = activation
 
         for i in range(1, self.__L):
-            self.__weights["W" + str(i + 1)] =\
-                np.random.randn(layers[i], layers[i - 1]) *\
+            self.__weights["W" + str(i + 1)] = \
+                np.random.randn(layers[i], layers[i - 1]) * \
                 np.sqrt(2 / layers[i - 1])
             self.__weights["b" + str(i + 1)] = np.zeros((layers[i], 1))
 
@@ -137,8 +150,8 @@ class DeepNeuralNetwork:
 
         for i in range(1, self.L + 1):
             z = np.matmul(
-                          self.weights["W" + str(i)],
-                          self.cache["A" + str(i - 1)])\
+                self.weights["W" + str(i)],
+                self.cache["A" + str(i - 1)]) \
                 + self.weights["b" + str(i)]
 
             # TODO: select different activation function for output layer.
@@ -148,7 +161,7 @@ class DeepNeuralNetwork:
             elif self.__activation == TANH:
                 self.cache["A" + str(i)] = tanh(z)
             elif self.__activation == LOGMOID:
-                self.cache["A" + str(i)] = logmoid(z)
+                self.cache["A" + str(i)] = logmoid2(z)
 
         return self.cache["A" + str(self.L)], self.cache
 
@@ -189,8 +202,8 @@ class DeepNeuralNetwork:
         self.forward_prop(X)
         # TODO: modify - 0.5 dinamically with mean(training_data)
         # TODO: output as a probability (float).
-        return np.where(self.cache["A" + str(self.L)] >= 0.5, 1, 0),\
-            self.cost(Y, self.cache["A" + str(self.L)])
+        return np.where(self.cache["A" + str(self.L)] >= 0.5, 1, 0), \
+               self.cost(Y, self.cache["A" + str(self.L)])
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
@@ -204,8 +217,8 @@ class DeepNeuralNetwork:
         :return: Nothing.
         """
 
-        dZ = cache['A' + str(self.L)] - Y           # ERROR
-        m1 = (1 / Y.shape[1])                       # FACTOR TO DIVIDE BY NUMBER OF INPUT DATA
+        dZ = cache['A' + str(self.L)] - Y  # ERROR
+        m1 = (1 / Y.shape[1])  # FACTOR TO DIVIDE BY NUMBER OF INPUT DATA
 
         for i in range(self.L, 0, -1):
             ''' BACKPROPAGATION USING GRADIENT DESCENT'''
@@ -219,11 +232,11 @@ class DeepNeuralNetwork:
 
             # TODO: research second order derivative (Newton’s Method, Hessian Matrix   ).
             # Apply activation function derivative (gradient).
-            A = cache['A' + str(i - 1)]             # output of the activation function.
+            A = cache['A' + str(i - 1)]  # output of the activation function.
             if self.__activation == SIGMOID:
-                dZ *= (A * (1 - A))                 # f'(x) = f(x)(1 - f(x))
+                dZ *= (A * (1 - A))  # f'(x) = f(x)(1 - f(x))
             elif self.__activation == TANH:
-                dZ *= (1 - np.power(A, 2))          # f'(x) = 1 - f(x)^2
+                dZ *= (1 - np.power(A, 2))  # f'(x) = 1 - f(x)^2
             elif self.__activation == LOGMOID:
                 ''' DERIVATIVE OF LOGMOID FUNCTION
                 z = np.matmul(self.weights["W" + str(i - 1)], self.cache["A" + str(i - 2)])\
@@ -233,7 +246,7 @@ class DeepNeuralNetwork:
                 So logmoid_inv is used instead to calculate previous z, i.e. the
                 value before the activation function is the inverse of the output
                 of the activation function.'''
-                z = logmoid_inv(A)                  # f'(x) = {1/(1-x), }
+                z = logmoid_inv2(A)  # f'(x) = {1/(1-x), }
                 dZ *= np.where(z < 0, np.power(1 - z, -1), np.power(1 + z, -1))
 
     def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True, graph=True, step=100):
